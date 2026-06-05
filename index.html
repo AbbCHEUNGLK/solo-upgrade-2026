@@ -11,19 +11,16 @@
 <body>
 <div class="shell">
 
-  <!-- ─── SIDEBAR ─── -->
   <nav class="sidebar">
     <div class="sidebar-top">
       <div class="workspace-row">
         <div class="ws-icon">升</div>
         <span class="ws-name">獨自升級 2026</span>
       </div>
-
       <div class="nav-section-label">Overview</div>
       <a class="nav-item active" onclick="go('home')" href="#">
         <span class="nav-icon">🏠</span> 首頁
       </a>
-
       <div class="nav-section-label">Daily</div>
       <a class="nav-item" onclick="go('daily')" href="#">
         <span class="nav-icon">✅</span> 每日任務
@@ -35,20 +32,17 @@
       <a class="nav-item" onclick="go('ldr')" href="#">
         <span class="nav-icon">📖</span> Learn → Re-tell
       </a>
-
       <div class="nav-section-label">Progress</div>
       <a class="nav-item" onclick="go('certs')" href="#">
         <span class="nav-icon">🏆</span> 專業認證
       </a>
     </div>
-
     <div class="sidebar-footer">
       <div class="streak-title">本週打卡</div>
       <div class="streak-dots" id="streak-row"></div>
     </div>
   </nav>
 
-  <!-- ─── MAIN ─── -->
   <div class="main">
     <div class="topbar">
       <div class="breadcrumb">
@@ -72,7 +66,6 @@
     <div class="page" id="page-area"></div>
   </div>
 
-  <!-- ─── MOBILE NAV ─── -->
   <div class="mobile-nav">
     <div class="mn-item active" onclick="go('home')"><span class="mn-icon">🏠</span><span class="mn-label">首頁</span></div>
     <div class="mn-item" onclick="go('daily')"><span class="mn-icon">✅</span><span class="mn-label">任務</span></div>
@@ -83,14 +76,14 @@
 
 </div>
 
-<!-- Scripts — 順序重要 -->
-<script src="utils/storage.js"></script>
-<script src="utils/api.js"></script>
-<script src="pages/home.js"></script>
-<script src="pages/daily.js"></script>
-<script src="pages/session.js"></script>
-<script src="pages/ldr.js"></script>
-<script src="pages/certs.js"></script>
+<!-- 路徑全部改成根目錄 -->
+<script src="storage.js"></script>
+<script src="api.js"></script>
+<script src="home.js"></script>
+<script src="daily.js"></script>
+<script src="session.js"></script>
+<script src="ldr.js"></script>
+<script src="certs.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
