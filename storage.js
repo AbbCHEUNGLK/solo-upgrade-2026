@@ -1,26 +1,104 @@
-// utils/storage.js — localStorage 封裝
-// 改儲存邏輯只需動這個檔案
+// storage.js — Supabase 雲端同步版本
+// 進度會自動同步到所有裝置
 
-const TODAY = new Date().toISOString().slice(0, 10);
-const YM    = new Date().toISOString().slice(0, 7);
+const SUPABASE_URL = 'https://hkkyyuhchdkfakjjrthq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_4lQ6JasfuyWHon8eDOrKmg_gi1XDPUb';
+const USER_ID      = 'default';
+const TODAY        = new Date().toISOString().slice(0, 10);
+const YM           = new Date().toISOString().slice(0, 7);
 
+// ─── 本地快取（離線時仍可用）───────────────────
+let _cache = {
+  tasks_done: {},   // { '2026-06-05': [0,1,2] }
+  streak:     {},   // { '2026-06': [0,1,4] }
+  cert_prog:  {},
+  posts_done: [],
+};
+
+// ─── Supabase fetch helper ──────────────────────
+async function _sbFetch(method, body) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/progress?user_id=eq.${USER_ID}`, {
+    method,
+    headers: {
+      'apikey':        SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type':  'application/json',
+      'Prefer':        method === 'POST' ? 'resolution=merge-duplicates' : 'return=minimal',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res;
+}
+
+// ─── 啟動時從雲端載入 ──────────────────────────
 const Storage = {
-  get: (key, fallback) => JSON.parse(localStorage.getItem(key) ?? JSON.stringify(fallback)),
-  set: (key, val)      => localStorage.setItem(key, JSON.stringify(val)),
+  async load() {
+    try {
+      const res  = await fetch(
+        `${SUPABASE_URL}/rest/v1/progress?user_id=eq.${USER_ID}&select=*`,
+        { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+      );
+      const rows = await res.json();
+      if (rows.length > 0) {
+        const r    = rows[0];
+        _cache.tasks_done = r.tasks_done || {};
+        _cache.streak     = r.streak     || {};
+        _cache.cert_prog  = r.cert_prog  || {};
+        _cache.posts_done = r.posts_done || [];
+      }
+    } catch (e) {
+      console.warn('Supabase load failed, using local cache:', e);
+    }
+  },
 
-  // 每日任務
-  getTasksDone:  ()  => Storage.get('td_' + TODAY, []),
-  setTasksDone:  (v) => Storage.set('td_' + TODAY, v),
+  async _save() {
+    try {
+      await _sbFetch('POST', {
+        user_id:    USER_ID,
+        tasks_done: _cache.tasks_done,
+        streak:     _cache.streak,
+        cert_prog:  _cache.cert_prog,
+        posts_done: _cache.posts_done,
+        updated_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.warn('Supabase save failed:', e);
+    }
+  },
 
-  // 本週打卡
-  getStreak:  ()  => Storage.get('sk_' + YM, []),
-  setStreak:  (v) => Storage.set('sk_' + YM, v),
+  // ─── 每日任務 ──────────────────────────────
+  getTasksDone() {
+    return _cache.tasks_done[TODAY] || [];
+  },
+  async setTasksDone(v) {
+    _cache.tasks_done[TODAY] = v;
+    await this._save();
+  },
 
-  // 認證進度
-  getCertProg:  ()  => Storage.get('cp2', {}),
-  setCertProg:  (v) => Storage.set('cp2', v),
+  // ─── 本週打卡 ──────────────────────────────
+  getStreak() {
+    return _cache.streak[YM] || [];
+  },
+  async setStreak(v) {
+    _cache.streak[YM] = v;
+    await this._save();
+  },
 
-  // 每週輸出打卡
-  getPostsDone:  ()  => Storage.get('psd', []),
-  setPostsDone:  (v) => Storage.set('psd', v),
+  // ─── 認證進度 ──────────────────────────────
+  getCertProg() {
+    return _cache.cert_prog || {};
+  },
+  async setCertProg(v) {
+    _cache.cert_prog = v;
+    await this._save();
+  },
+
+  // ─── 每週輸出打卡 ──────────────────────────
+  getPostsDone() {
+    return _cache.posts_done || [];
+  },
+  async setPostsDone(v) {
+    _cache.posts_done = v;
+    await this._save();
+  },
 };
