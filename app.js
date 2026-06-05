@@ -1,5 +1,4 @@
 // app.js — 導航 + 初始化
-// 加新頁面：1) 建 pages/xxx.js  2) 在 index.html 加 <script>  3) 在這裡加一行
 
 const PAGE_NAMES = {
   home:    '首頁',
@@ -23,36 +22,46 @@ function updateTopProgress() {
   document.getElementById('nc-daily').textContent = Storage.getTasksDone().length + '/' + NTASKS;
 }
 
-// ─── 導航 ───────────────────────────────────
+// ─── 導航 ────────────────────────────────────
 function go(page) {
   document.querySelectorAll('.nav-item, .mn-item').forEach(el => {
     el.classList.toggle('active', !!el.getAttribute('onclick')?.includes("'" + page + "'"));
   });
   document.getElementById('bc-page').textContent = PAGE_NAMES[page];
-  const renders = { home: renderHome, daily: renderDaily, session: renderSession, ldr: renderLDR, certs: renderCerts };
-  renders[page]?.();
+  ({ home: renderHome, daily: renderDaily, session: renderSession, ldr: renderLDR, certs: renderCerts })[page]?.();
   updateTopProgress();
   return false;
 }
 
-// ─── 本週打卡 ───────────────────────────────
+// ─── 本週打卡 ────────────────────────────────
 function renderStreak() {
-  const labels = ['一','二','三','四','五','六','日'];
-  const dow = new Date().getDay();
+  const labels   = ['一','二','三','四','五','六','日'];
+  const dow      = new Date().getDay();
   const todayIdx = dow === 0 ? 6 : dow - 1;
-  const data = Storage.getStreak();
+  const data     = Storage.getStreak();
   document.getElementById('streak-row').innerHTML = labels.map((l, i) => {
     const cls = 'sdot' + (data.includes(i) ? ' on' : '') + (i === todayIdx ? ' today' : '');
     return `<div class="${cls}" onclick="toggleStreak(${i})">${l}</div>`;
   }).join('');
 }
-function toggleStreak(i) {
+
+async function toggleStreak(i) {
   const data = Storage.getStreak();
   data.includes(i) ? data.splice(data.indexOf(i), 1) : data.push(i);
-  Storage.setStreak(data);
+  await Storage.setStreak(data);
   renderStreak();
 }
 
-// ─── 啟動 ───────────────────────────────────
-renderStreak();
-go('home');
+// ─── 啟動：先從 Supabase 載入再 render ───────
+async function init() {
+  // 先顯示 loading 避免白屏
+  document.getElementById('page-area').innerHTML =
+    '<div style="padding:48px 56px;color:var(--text3);font-size:13px">載入中…</div>';
+
+  await Storage.load();   // 從 Supabase 同步最新進度
+
+  renderStreak();
+  go('home');
+}
+
+init();
