@@ -5,6 +5,7 @@ const PAGE_NAMES = {
   daily:   '每日任務',
   session: 'Storytelling Session',
   ldr:     'Learn → Re-tell',
+  writer:  'Substack Writer',
   certs:   '專業認證',
 };
 
@@ -22,18 +23,23 @@ function updateTopProgress() {
   document.getElementById('nc-daily').textContent = Storage.getTasksDone().length + '/' + NTASKS;
 }
 
-// ─── 導航 ────────────────────────────────────
 function go(page) {
   document.querySelectorAll('.nav-item, .mn-item').forEach(el => {
     el.classList.toggle('active', !!el.getAttribute('onclick')?.includes("'" + page + "'"));
   });
   document.getElementById('bc-page').textContent = PAGE_NAMES[page];
-  ({ home: renderHome, daily: renderDaily, session: renderSession, ldr: renderLDR, certs: renderCerts })[page]?.();
+  ({
+    home:    renderHome,
+    daily:   renderDaily,
+    session: renderSession,
+    ldr:     renderLDR,
+    writer:  renderWriter,
+    certs:   renderCerts,
+  })[page]?.();
   updateTopProgress();
   return false;
 }
 
-// ─── 本週打卡 ────────────────────────────────
 function renderStreak() {
   const labels   = ['一','二','三','四','五','六','日'];
   const dow      = new Date().getDay();
@@ -52,14 +58,10 @@ async function toggleStreak(i) {
   renderStreak();
 }
 
-// ─── 啟動：先從 Supabase 載入再 render ───────
 async function init() {
-  // 先顯示 loading 避免白屏
   document.getElementById('page-area').innerHTML =
     '<div style="padding:48px 56px;color:var(--text3);font-size:13px">載入中…</div>';
-
-  await Storage.load();   // 從 Supabase 同步最新進度
-
+  await Storage.load();
   renderStreak();
   go('home');
 }
