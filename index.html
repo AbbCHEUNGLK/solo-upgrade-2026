@@ -32,6 +32,10 @@
       <a class="nav-item" onclick="go('ldr')" href="#">
         <span class="nav-icon">📖</span> Learn → Re-tell
       </a>
+      <div class="nav-section-label">Output</div>
+      <a class="nav-item" onclick="go('writer')" href="#">
+        <span class="nav-icon">✍️</span> Substack Writer
+      </a>
       <div class="nav-section-label">Progress</div>
       <a class="nav-item" onclick="go('certs')" href="#">
         <span class="nav-icon">🏆</span> 專業認證
@@ -69,20 +73,20 @@
   <div class="mobile-nav">
     <div class="mn-item active" onclick="go('home')"><span class="mn-icon">🏠</span><span class="mn-label">首頁</span></div>
     <div class="mn-item" onclick="go('daily')"><span class="mn-icon">✅</span><span class="mn-label">任務</span></div>
-    <div class="mn-item" onclick="go('session')"><span class="mn-icon">🎙</span><span class="mn-label">Session</span></div>
     <div class="mn-item" onclick="go('ldr')"><span class="mn-icon">📖</span><span class="mn-label">Re-tell</span></div>
+    <div class="mn-item" onclick="go('writer')"><span class="mn-icon">✍️</span><span class="mn-label">Writer</span></div>
     <div class="mn-item" onclick="go('certs')"><span class="mn-icon">🏆</span><span class="mn-label">認證</span></div>
   </div>
 
 </div>
 
-<!-- 路徑全部改成根目錄 -->
 <script src="storage.js"></script>
 <script src="api.js"></script>
 <script src="home.js"></script>
 <script src="daily.js"></script>
 <script src="session.js"></script>
 <script src="ldr.js"></script>
+<script src="writer.js"></script>
 <script src="certs.js"></script>
 <script src="app.js"></script>
 </body>
