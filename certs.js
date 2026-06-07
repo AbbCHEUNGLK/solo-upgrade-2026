@@ -1,4 +1,4 @@
-// pages/certs.js — 專業認證追蹤
+// certs.js — 專業認證追蹤
 // 改認證列表只需動 CERTS 陣列
 
 const CERTS = [

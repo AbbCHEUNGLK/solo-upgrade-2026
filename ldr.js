@@ -1,4 +1,4 @@
-// pages/ldr.js — Learn → Digest → Re-tell
+// ldr.js — Learn → Digest → Re-tell
 // 改練習流程只需動這個檔案
 
 let lStep = 0, lType = 'article', lCore = '', lInput = '', lOneline = '', lConnect = '', lRetell = '';

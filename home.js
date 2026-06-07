@@ -1,4 +1,4 @@
-// pages/home.js — 首頁
+// home.js — 首頁
 // 改首頁內容只需動這個檔案
 
 function renderHome() {

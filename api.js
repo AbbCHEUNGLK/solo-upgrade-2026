@@ -1,4 +1,4 @@
-// utils/api.js — Claude API 呼叫
+// api.js — Claude API 呼叫
 // 改 model 或加 system prompt 只需動這個檔案
 
 const API = {

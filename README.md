@@ -4,30 +4,35 @@
 
 ```
 solo-upgrade-2026/
-├── index.html          ← HTML 骨架，加新頁面在這裡加 <script>
-├── style.css           ← 所有樣式，改 UI 只動這個
-├── app.js              ← 導航邏輯、打卡 streak
-├── pages/
-│   ├── home.js         ← 首頁
-│   ├── daily.js        ← 每日任務（改任務清單在 TASKS 陣列）
-│   ├── session.js      ← Storytelling（改 AI 角色在 PHASES 陣列）
-│   ├── ldr.js          ← Learn → Re-tell
-│   └── certs.js        ← 認證追蹤（改認證列表在 CERTS 陣列）
-└── utils/
-    ├── api.js          ← Claude API + HTML helpers
-    └── storage.js      ← localStorage 封裝
+├── index.html       ← HTML 骨架，加新頁面在這裡加 <script>
+├── style.css        ← 所有樣式，改 UI 只動這個
+├── app.js           ← 導航邏輯、打卡 streak
+├── storage.js       ← Supabase + localStorage（雲端同步進度）
+├── api.js           ← Claude API 呼叫
+├── home.js          ← 首頁
+├── daily.js         ← 每日任務（改任務清單在 TASKS 陣列）
+├── session.js       ← Storytelling Session（改 phase 在 PHASES 陣列）
+├── ldr.js           ← Learn → Digest → Re-tell
+├── writer.js        ← Substack Writer
+├── certs.js         ← 認證追蹤（改認證列表在 CERTS 陣列）
+├── CLAUDE.md        ← Claude 合作 protocol
+└── README.md
 ```
+
+**Flat 根目錄結構** — 所有 file 直接放 root，唔分 `pages/` 或 `utils/` subfolder（方便維護同部署）。
 
 ## 常見更新場景
 
 | 想改什麼 | 動哪個檔案 |
 |---------|-----------|
 | 改顏色 / 字體 / 間距 | `style.css` |
-| 改任務清單 | `pages/daily.js` → `TASKS` 陣列 |
-| 改 Storytelling phase | `pages/session.js` → `PHASES` 陣列 |
-| 加新認證 | `pages/certs.js` → `CERTS` 陣列 |
-| 改 AI 用嘅 model | `utils/api.js` → `API.MODEL` |
-| 加新頁面 | 建 `pages/xxx.js` → `index.html` 加 `<script>` → `app.js` 加 route |
+| 改任務清單 | `daily.js` → `TASKS` 陣列 |
+| 改 Storytelling phase | `session.js` → `PHASES` 陣列 |
+| 加新認證 | `certs.js` → `CERTS` 陣列 |
+| 改 AI 用嘅 model | `api.js` → `API.MODEL` |
+| 改 Substack 寫作邏輯 | `writer.js` |
+| 改雲端同步邏輯 | `storage.js` |
+| 加新頁面 | 建 `xxx.js` → `index.html` 加 `<script>` → `app.js` 加 route |
 
 ## Deploy 到 GitHub Pages
 

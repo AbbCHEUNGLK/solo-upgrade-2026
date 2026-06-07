@@ -1,4 +1,4 @@
-// pages/daily.js — 每日任務
+// daily.js — 每日任務
 // 改任務清單只需動 TASKS 陣列
 
 const TASKS = [

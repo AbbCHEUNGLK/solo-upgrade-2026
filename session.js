@@ -1,4 +1,4 @@
-// pages/session.js — Storytelling Session
+// session.js — Storytelling Session
 // 改 AI 角色或 phase 數量只需動 PHASES
 
 const PHASES = [
