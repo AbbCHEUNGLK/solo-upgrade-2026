@@ -69,15 +69,6 @@ function _renderCalendar() {
     <div class="cal-grid">
       ${cellsHtml}
     </div>
-    <div class="cal-legend">
-      <span class="cal-legend-text">少</span>
-      <div class="cal-cell cal-l0 cal-legend-cell"></div>
-      <div class="cal-cell cal-l1 cal-legend-cell"></div>
-      <div class="cal-cell cal-l2 cal-legend-cell"></div>
-      <div class="cal-cell cal-l3 cal-legend-cell"></div>
-      <div class="cal-cell cal-l4 cal-legend-cell"></div>
-      <span class="cal-legend-text">多</span>
-    </div>
   </div>
   ${_homeUI.selectedDate ? _renderDayDetail() : ''}`;
 }
@@ -145,26 +136,28 @@ function renderHome() {
   <div class="home-title">${g}，<em>繼續升級</em>。</div>
   <div class="home-motto">「給我勇氣去改變我能改變的事，給我雅量去接受我不能改變的事，給我智慧去區分這兩件事。」</div>
 
-  <div class="section-heading">進度日曆</div>
-  ${_renderCalendar()}
-
   <div class="section-heading" style="margin-top:32px">快速開始</div>
-  <div class="home-cards">
-    <div class="home-card" onclick="go('daily')">
-      <span class="hc-icon">✅</span>
-      <div class="hc-name">每日任務</div>
-      <div class="hc-sub">${Storage.getTasksDone().length}/${NTASKS} 完成 · ${pct()}%</div>
+  <div class="home-quick-row">
+    <div class="home-cards">
+      <div class="home-card" onclick="go('daily')">
+        <span class="hc-icon">✅</span>
+        <div class="hc-name">每日任務</div>
+        <div class="hc-sub">${Storage.getTasksDone().length}/${NTASKS} 完成 · ${pct()}%</div>
+      </div>
+      <div class="home-card" onclick="go('session')">
+        <span class="hc-icon">🎙</span>
+        <div class="hc-name">Storytelling Session</div>
+        <div class="hc-sub">4 階段 · 約 25 分鐘</div>
+      </div>
+      <div class="home-card" onclick="go('ldr')">
+        <span class="hc-icon">📖</span>
+        <div class="hc-name">Learn → Re-tell</div>
+        <div class="hc-sub">貼文章 · 消化 · 輸出</div>
+      </div>
     </div>
-    <div class="home-card" onclick="go('session')">
-      <span class="hc-icon">🎙</span>
-      <div class="hc-name">Storytelling Session</div>
-      <div class="hc-sub">4 階段 · 約 25 分鐘</div>
-    </div>
-    <div class="home-card" onclick="go('ldr')">
-      <span class="hc-icon">📖</span>
-      <div class="hc-name">Learn → Re-tell</div>
-      <div class="hc-sub">貼文章 · 消化 · 輸出</div>
-    </div>
+    <aside class="home-cal-aside">
+      ${_renderCalendar()}
+    </aside>
   </div>
 
   <div class="section-heading" style="margin-top:32px">長期目標</div>
