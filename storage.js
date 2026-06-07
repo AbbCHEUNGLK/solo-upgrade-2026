@@ -73,8 +73,8 @@ const Storage = {
   },
 
   // ─── 每日任務 ──────────────────────────────
-  getTasksDone() {
-    return _cache.tasks_done[TODAY] || [];
+  getTasksDone(date) {
+    return _cache.tasks_done[date || TODAY] || [];
   },
   async setTasksDone(v) {
     _cache.tasks_done[TODAY] = v;

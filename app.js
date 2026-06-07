@@ -40,22 +40,38 @@ function go(page) {
   return false;
 }
 
-function renderStreak() {
-  const labels   = ['一','二','三','四','五','六','日'];
-  const dow      = new Date().getDay();
-  const todayIdx = dow === 0 ? 6 : dow - 1;
-  const data     = Storage.getStreak();
-  document.getElementById('streak-row').innerHTML = labels.map((l, i) => {
-    const cls = 'sdot' + (data.includes(i) ? ' on' : '') + (i === todayIdx ? ' today' : '');
-    return `<div class="${cls}" onclick="toggleStreak(${i})">${l}</div>`;
-  }).join('');
+function computeStreak() {
+  // 連續日有 >=1 task done。今日如果零 task，由琴日開始計（仲未失 streak）
+  const today = new Date();
+  let count = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const done = Storage.getTasksDone(key).length;
+    if (done > 0) {
+      count++;
+    } else if (i === 0) {
+      // 今日仲未做 — 唔當 break，繼續睇琴日
+      continue;
+    } else {
+      break;
+    }
+  }
+  return count;
 }
 
-async function toggleStreak(i) {
-  const data = Storage.getStreak();
-  data.includes(i) ? data.splice(data.indexOf(i), 1) : data.push(i);
-  await Storage.setStreak(data);
-  renderStreak();
+function renderStreak() {
+  const streak = computeStreak();
+  const titleEl = document.querySelector('.streak-title');
+  if (titleEl) titleEl.textContent = 'Daily Streak';
+  const row = document.getElementById('streak-row');
+  if (row) {
+    row.innerHTML = `
+      <div class="streak-num"><span class="streak-flame">🔥</span><span class="streak-n">${streak}</span></div>
+      <div class="streak-label">${streak === 1 ? 'day' : 'days'} 連續</div>
+    `;
+  }
 }
 
 async function init() {
