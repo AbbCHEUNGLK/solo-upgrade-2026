@@ -13,6 +13,7 @@ let _cache = {
   streak:     {},   // { '2026-06': [0,1,4] }
   cert_prog:  {},
   posts_done: [],
+  course_hl:  {},   // { c101: '整理咗嘅 markdown text', ... }
 };
 
 // ─── Supabase fetch helper ──────────────────────
@@ -45,6 +46,7 @@ const Storage = {
         _cache.streak     = r.streak     || {};
         _cache.cert_prog  = r.cert_prog  || {};
         _cache.posts_done = r.posts_done || [];
+        _cache.course_hl  = r.course_hl  || {};
       }
     } catch (e) {
       console.warn('Supabase load failed, using local cache:', e);
@@ -59,6 +61,7 @@ const Storage = {
         streak:     _cache.streak,
         cert_prog:  _cache.cert_prog,
         posts_done: _cache.posts_done,
+        course_hl:  _cache.course_hl,
         updated_at: new Date().toISOString(),
       });
     } catch (e) {
@@ -99,6 +102,15 @@ const Storage = {
   },
   async setPostsDone(v) {
     _cache.posts_done = v;
+    await this._save();
+  },
+
+  // ─── Anthropic Courses 重點筆記 ────────────
+  getCourseHighlights() {
+    return _cache.course_hl || {};
+  },
+  async setCourseHighlights(v) {
+    _cache.course_hl = v;
     await this._save();
   },
 };
