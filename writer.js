@@ -1,349 +1,284 @@
-// writer.js — Substack Writer Studio
-// 5 段式 template，每段 AI 同時做 research / structure / editor
+// writer.js — Substack archive + reader + editor
+// 3 tabs: 已發佈 / 在寫 / Ideas
+// 點 row 可以 read，點 ✏️ 可以 edit，點 + 加新 可以新建
 
-const STAGES = [
-  {
-    key: 'hook',
-    num: '01',
-    label: 'Hook',
-    title: '開場：用數字建立 authority',
-    desc: '一個有 weight 嘅 stat 或 market data，令讀者第一句就停低',
-    placeholder: '例：根據 Fortune Business Insights 2026 報告，vanilla 佔全球雪糕市場 30.49%，是所有口味中最高的…',
-    aiRole: 'research',
-    helperLabel: '幫我搵相關數據',
-    helperPrompt: (topic, content) =>
-      `用戶想寫一篇 Substack post，主題：「${topic}」。
+const _wui = {
+  activeTab: 'published',   // 'published' | 'drafting' | 'idea'
+  viewingPostId: null,      // 喺 reading view 時 set
+  editingPostId: null,      // 'new' = 新建；string = 編輯現有
+};
 
-請幫佢搵 2-3 個有 authority 嘅數字或 market data 作為文章開場 hook。要求：
-- 來源要 traceable（具體期刊、研究機構、市場報告名）
-- 數字要 specific（百分比、人數、年份）
-- 對普通讀者有 surprise factor
+const _tabConfig = {
+  published: { emoji: '📚', label: '已發佈' },
+  drafting:  { emoji: '✍️', label: '在寫' },
+  idea:      { emoji: '💡', label: 'Ideas' },
+};
 
-繁體中文回答，每個 stat 用一句寫，附帶來源。`,
-  },
-  {
-    key: 'framework',
-    num: '02',
-    label: 'Framework',
-    title: '拆解：將 topic 變成可驗證嘅 dimensions',
-    desc: '將模糊嘅 quality 拆成 3-4 個 signal，每個都有清楚 criteria',
-    placeholder: '例：Dimension 1: Vanilla Nuance（看 specks 同 lingering）/ Dimension 2: Dairy Richness（看成份表第二材料）…',
-    aiRole: 'structure',
-    helperLabel: '幫我拆 framework',
-    helperPrompt: (topic, content) =>
-      `用戶寫緊一篇關於「${topic}」嘅 Substack post，需要將個 topic 拆解成 3-4 個 evaluation dimensions。
-
-${content ? `用戶現有嘅 draft：\n${content}\n\n基於呢啲，` : ''}請用提問方式引導用戶：
-1. 提出 3-4 條 critical questions 幫用戶識別應該用咩 dimensions
-2. 每條問題要具體、可以 actionable
-3. 最後提供一個 sample framework 作參考
-
-繁體中文，tone 似一個 thinking partner。`,
-  },
-  {
-    key: 'science',
-    num: '03',
-    label: 'Science',
-    title: '深入：背後嘅 mechanism 同 research',
-    desc: '搵 2-3 個 peer-reviewed studies 或 scientific principle 解釋現象',
-    placeholder: '例：Overrun（充氣率）嘅 cost engineering、天然 vanilla 200-500 種化合物 vs 人工 vanillin 單一化合物…',
-    aiRole: 'research',
-    helperLabel: '幫我搵 research papers',
-    helperPrompt: (topic, content) =>
-      `用戶寫緊「${topic}」相關嘅 Substack post，需要 science / mechanism 嘅深度 backing。
-
-${content ? `用戶現有嘅 draft：\n${content}\n\n` : ''}請幫佢：
-1. 列出 2-3 個相關嘅 peer-reviewed studies 或 scientific principle
-2. 每個附帶具體 citation（作者、年份、期刊）
-3. 解釋呢個 mechanism 點解 relevant
-4. 提示用戶有冇遺漏嘅關鍵概念
-
-繁體中文，包含必要嘅英文術語。`,
-  },
-  {
-    key: 'counter',
-    num: '04',
-    label: 'Counter-intuitive',
-    title: '反直覺：surface 一個讀者意外嘅 finding',
-    desc: '一個 challenge conventional wisdom 嘅 evidence，配上 critical caveat',
-    placeholder: '例：Harvard 190,000 人 cohort 發現每週食 2 次以上雪糕嘅人，第 2 型糖尿病風險低 22%——但係 observational study，可能係 lifestyle confounding…',
-    aiRole: 'critical',
-    helperLabel: '幫我搵 counter-intuitive evidence',
-    helperPrompt: (topic, content) =>
-      `用戶寫緊「${topic}」相關嘅 Substack post，需要一個 counter-intuitive section 提升文章嘅 intellectual depth。
-
-${content ? `用戶現有嘅 draft：\n${content}\n\n` : ''}請：
-1. 搵一個會 surprise 讀者嘅 finding 或 study
-2. 提供具體 citation
-3. 重要：同時 surface critical caveats（observational vs causal、sample limitations、confounding factors）
-4. 提示用戶點樣 frame 呢個 tension 而唔失去 credibility
-
-繁體中文，rigorous 但 accessible 嘅 tone。`,
-  },
-  {
-    key: 'closing',
-    num: '05',
-    label: 'Closing',
-    title: '收結：將 analysis 連結到讀者生活',
-    desc: '從 framework 提升到 transferable mental model，再以一個 emotional anchor 收尾',
-    placeholder: '例：人工香精永遠複製唔到天然 vanilla 數百種化合物嘅 nuances——就跟人一樣，我們身上嗰啲複雜層次先係最珍貴…',
-    aiRole: 'editor',
-    helperLabel: '幫我 polish 收結',
-    helperPrompt: (topic, content) =>
-      `用戶寫緊「${topic}」嘅 Substack post，需要寫一個有 emotional resonance 嘅結尾。
-
-${content ? `用戶嘅 draft：\n${content}\n\n` : ''}請：
-1. 評估而家嘅 closing 有冇 emotional payoff
-2. 提供 2-3 個改寫示範，每個用唔同 angle（philosophical / personal / actionable）
-3. 提示用戶最後一句應該係 image 定 action，唔好係 conclusion
-
-繁體中文，參考李堅翔 / Maggie Appleton 嗰種「平實但有後勁」嘅風格。`,
-  },
-];
-
-// 狀態
-let wStage = 0;
-let wTopic = '';
-let wContent = Array(STAGES.length).fill('');
-let wAiOutput = Array(STAGES.length).fill('');
-let wLoading = false;
+// ─── 主 render dispatch ────────────────────────────
 
 function renderWriter() {
+  if (_wui.viewingPostId) return _renderReader();
+  if (_wui.editingPostId) return _renderEditor();
+  return _renderList();
+}
+
+// ─── List view (3 tabs + post cards) ───────────────
+
+function _renderList() {
+  const posts = Storage.getPosts();
+  const counts = {
+    published: posts.filter(p => p.status === 'published').length,
+    drafting:  posts.filter(p => p.status === 'drafting').length,
+    idea:      posts.filter(p => p.status === 'idea').length,
+  };
+  const filtered = posts
+    .filter(p => p.status === _wui.activeTab)
+    .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+  const tabsHtml = ['published', 'drafting', 'idea'].map(t => {
+    const c = _tabConfig[t];
+    const active = _wui.activeTab === t ? ' active' : '';
+    return `<button class="writer-tab${active}" onclick="switchWriterTab('${t}')">${c.emoji} ${c.label} ${counts[t]}</button>`;
+  }).join('');
+
   document.getElementById('page-area').innerHTML = `
-<div class="page-inner" style="max-width:760px">
-  <div style="margin-bottom:20px">
-    <div class="page-eyebrow">Substack Writer Studio</div>
-    <div class="page-title">5 段式 BCG-style Long-form</div>
+<div class="page-inner">
+  <div style="margin-bottom:24px">
+    <div class="page-eyebrow">SUBSTACK WRITER</div>
+    <div class="page-title">Substack Writer</div>
+    <div class="page-sub-text">私人 archive · 每星期 1 篇結構化長文</div>
   </div>
 
-  <div class="topic-bar">
-    <span class="topic-label">📌 主題</span>
-    <input type="text" class="topic-input" id="w-topic" placeholder="例：點樣揀 vanilla 雪糕"
-      value="${esc(wTopic)}" oninput="wTopic=this.value">
-    <button class="btn btn-ghost btn-sm" onclick="wExport()">📄 匯出</button>
+  <div class="writer-tabs">
+    ${tabsHtml}
+    <button class="writer-new-btn" onclick="openWriterEditor('new')">+ 加新</button>
   </div>
 
-  <div class="writer-steps">
-    ${STAGES.map((s, i) => `
-    <div class="ws-step${i < wStage ? ' done' : i === wStage ? ' active' : ''}"
-      onclick="wGoStage(${i})">
-      <div class="ws-num">${s.num}</div>
-      <div class="ws-label">${s.label}</div>
-    </div>`).join('')}
-  </div>
-
-  <div id="w-panel"></div>
+  ${filtered.length === 0
+    ? `<div class="writer-empty">
+         <div class="writer-empty-icon">${_tabConfig[_wui.activeTab].emoji}</div>
+         <div class="writer-empty-text">仲未有 ${_tabConfig[_wui.activeTab].label} 嘅 post</div>
+         <div class="writer-empty-hint">撳 [+ 加新] 開始</div>
+       </div>`
+    : `<div class="writer-list">${filtered.map(_postCard).join('')}</div>`
+  }
 </div>`;
-  renderStagePanel();
 }
 
-function renderStagePanel() {
-  const s = STAGES[wStage];
-  const c = document.getElementById('w-panel');
-  if (!c) return;
-  // sync step indicators
-  document.querySelectorAll('.ws-step').forEach((el, i) => {
-    el.className = 'ws-step' + (i < wStage ? ' done' : i === wStage ? ' active' : '');
-  });
+function _postCard(post) {
+  const body = post.body || '';
+  const snippet = body.replace(/^#+\s/gm, '').replace(/^[-*]\s/gm, '').replace(/^\d+\.\s/gm, '').trim().slice(0, 180);
+  const wc = body.replace(/\s/g, '').length;
+  const hasUrl = post.substackUrl && post.substackUrl.trim();
 
-  c.innerHTML = `
-<div class="card">
-  <div class="card-header">
-    <div>
-      <div class="card-title">${s.title}</div>
-      <div class="card-sub">${s.desc}</div>
+  return `
+  <div class="post-card" onclick="viewPost('${post.id}')">
+    <div class="post-card-title">${esc(post.title || '(未命名)')}</div>
+    <div class="post-card-meta">
+      <span>${esc(post.date || '無日期')}</span>
+      ${wc > 0 ? `<span>· 約 ${wc.toLocaleString()} 字</span>` : ''}
     </div>
-    <span class="card-tag">Stage ${s.num}</span>
-  </div>
-  <div class="card-body">
-
-    <div class="ai-helper-box">
-      <button class="btn btn-orange btn-sm" onclick="wAiHelp()" ${wLoading?'disabled':''}>
-        🤖 ${s.helperLabel}
-      </button>
-      <span class="ai-helper-hint">AI 會根據你嘅主題同 draft 給建議</span>
+    ${snippet ? `<div class="post-card-snippet">${esc(snippet)}…</div>` : ''}
+    <div class="post-card-actions" onclick="event.stopPropagation()">
+      ${hasUrl ? `<a class="post-card-link" href="${esc(post.substackUrl)}" target="_blank" rel="noopener">↗ Substack</a>` : ''}
+      <button class="post-card-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>
     </div>
+  </div>`;
+}
 
-    <div class="ai-output-box" id="w-ai-out" style="display:${wAiOutput[wStage]?'block':'none'}">
-      <div class="ai-output-label">💡 AI 建議</div>
-      <div class="ai-output-body">${wAiOutput[wStage] ? fmt(wAiOutput[wStage]) : ''}</div>
-    </div>
+// ─── Reader view ───────────────────────────────────
 
-    <div class="field-group" style="margin-top:14px">
-      <span class="field-label">你嘅內容</span>
-      <textarea class="inp" id="w-content" rows="8" placeholder="${esc(s.placeholder)}"
-        oninput="wContent[wStage]=this.value">${esc(wContent[wStage])}</textarea>
-    </div>
+function _renderReader() {
+  const post = Storage.getPosts().find(p => p.id === _wui.viewingPostId);
+  if (!post) { _wui.viewingPostId = null; return renderWriter(); }
 
-    <div class="writer-actions">
-      <button class="btn btn-ghost" onclick="wPrev()" ${wStage===0?'disabled':''}>← 上一段</button>
-      <button class="btn btn-ghost btn-sm" onclick="wPolish()" ${wLoading?'disabled':''}>
-        ✨ Polish 呢段
-      </button>
-      <button class="btn btn-primary" onclick="wNext()" ${wStage===STAGES.length-1?'disabled':''}>
-        下一段 →
-      </button>
+  const hasUrl = post.substackUrl && post.substackUrl.trim();
+
+  document.getElementById('page-area').innerHTML = `
+<div class="reader-view">
+  <div class="reader-toolbar">
+    <button class="reader-back" onclick="closePost()">← 返回</button>
+    <div class="reader-toolbar-right">
+      ${hasUrl ? `<a class="reader-substack" href="${esc(post.substackUrl)}" target="_blank" rel="noopener">↗ Substack 原文</a>` : ''}
+      <button class="reader-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>
     </div>
   </div>
-</div>
+  <article class="reader-article">
+    <h1 class="reader-title">${esc(post.title)}</h1>
+    <div class="reader-meta">${esc(post.date || '')}</div>
+    <div class="reader-body">${_renderMarkdown(post.body || '')}</div>
+  </article>
+</div>`;
+}
 
-${wStage === STAGES.length - 1 ? `
-<div class="card" style="margin-top:14px">
-  <div class="card-header">
-    <div>
-      <div class="card-title">🏁 完成</div>
-      <div class="card-sub">合成 final draft 同生成 reference list</div>
+// ─── Editor view ───────────────────────────────────
+
+function _renderEditor() {
+  const posts = Storage.getPosts();
+  const isNew = _wui.editingPostId === 'new';
+  const post = isNew
+    ? { id: 'p' + Date.now(), status: _wui.activeTab, title: '', date: new Date().toISOString().slice(0, 10), body: '', substackUrl: '' }
+    : posts.find(p => p.id === _wui.editingPostId);
+  if (!post) { _wui.editingPostId = null; return renderWriter(); }
+
+  document.getElementById('page-area').innerHTML = `
+<div class="editor-view">
+  <div class="reader-toolbar">
+    <button class="reader-back" onclick="closeEditor()">← 取消</button>
+    <div class="reader-toolbar-right">
+      ${!isNew ? `<button class="editor-delete" onclick="deletePost('${post.id}')">🗑 刪除</button>` : ''}
+      <button class="editor-save" onclick="savePost('${post.id}', ${isNew})">💾 儲存</button>
     </div>
   </div>
-  <div class="card-body">
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="wAssemble()">📜 合成 Final Draft</button>
-      <button class="btn btn-ghost" onclick="wGenRefs()">📚 生成 References</button>
+
+  <div class="editor-form">
+    <label class="editor-label">標題</label>
+    <input class="editor-input" id="ed-title" value="${esc(post.title)}" placeholder="例如：一勺香草雪糕的解構…">
+
+    <div class="editor-row">
+      <div class="editor-col">
+        <label class="editor-label">日期</label>
+        <input class="editor-input" id="ed-date" type="date" value="${esc(post.date)}">
+      </div>
+      <div class="editor-col">
+        <label class="editor-label">狀態</label>
+        <select class="editor-input" id="ed-status">
+          <option value="idea"      ${post.status === 'idea'      ? 'selected' : ''}>💡 Idea</option>
+          <option value="drafting"  ${post.status === 'drafting'  ? 'selected' : ''}>✍️ 在寫</option>
+          <option value="published" ${post.status === 'published' ? 'selected' : ''}>📚 已發佈</option>
+        </select>
+      </div>
     </div>
-    <div id="w-final" style="margin-top:14px"></div>
+
+    <label class="editor-label">Substack URL（已發佈時填）</label>
+    <input class="editor-input" id="ed-url" value="${esc(post.substackUrl || '')}" placeholder="https://abbycheung1.substack.com/p/...">
+
+    <label class="editor-label">內容（Markdown）</label>
+    <textarea class="editor-textarea" id="ed-body" rows="24" placeholder="# 標題&#10;&#10;## 引言&#10;...">${esc(post.body || '')}</textarea>
+    <div class="editor-hint">支援 Markdown：# 標題、**粗體**、*斜體*、[連結](url)、- bullet、1. number list、&gt; 引用、\`code\`</div>
   </div>
-</div>` : ''}
-`;
+</div>`;
 }
 
-// ─── Stage Navigation ─────────────────────────
-function wGoStage(i) { wStage = i; renderStagePanel(); }
-function wPrev() { if (wStage > 0) { wStage--; renderStagePanel(); } }
-function wNext() { if (wStage < STAGES.length - 1) { wStage++; renderStagePanel(); } }
+// ─── Markdown renderer（極簡版）──────────────────
 
-// ─── AI Helper ────────────────────────────────
-async function wAiHelp() {
-  if (!wTopic.trim()) { alert('請先輸入主題'); return; }
-  const s = STAGES[wStage];
-  const out = document.getElementById('w-ai-out');
-  const body = document.getElementById('w-ai-out')?.querySelector('.ai-output-body');
-  if (out) {
-    out.style.display = 'block';
-    body.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
+function _renderMarkdown(md) {
+  if (!md) return '';
+  const lines = md.split('\n');
+  const out = [];
+  let inList = null;
+  let para = [];
+
+  function flushPara() {
+    if (para.length) {
+      const text = para.join(' ').trim();
+      if (text) out.push(`<p>${_inlineMd(text)}</p>`);
+      para = [];
+    }
   }
-  wLoading = true;
-  try {
-    const prompt = s.helperPrompt(wTopic, wContent[wStage]);
-    const r = await API.call(
-      [{ role: 'user', content: prompt }],
-      '你係專業嘅 Substack 寫作助手，協助用戶寫深度 long-form post。語言：繁體中文 + 必要英文術語。'
-    );
-    wAiOutput[wStage] = r;
-    if (body) body.innerHTML = fmt(r);
-  } catch (e) {
-    if (body) body.innerHTML = `<span style="color:var(--red)">${e.message}</span>`;
+  function flushList() {
+    if (inList) { out.push(`</${inList}>`); inList = null; }
   }
-  wLoading = false;
+
+  for (const raw of lines) {
+    const line = raw.replace(/\s+$/, '');
+    if (!line.trim()) { flushPara(); flushList(); continue; }
+
+    let m;
+    if ((m = line.match(/^### (.+)$/)))  { flushPara(); flushList(); out.push(`<h3>${_inlineMd(m[1])}</h3>`); continue; }
+    if ((m = line.match(/^## (.+)$/)))   { flushPara(); flushList(); out.push(`<h2>${_inlineMd(m[1])}</h2>`); continue; }
+    if ((m = line.match(/^# (.+)$/)))    { flushPara(); flushList(); out.push(`<h1>${_inlineMd(m[1])}</h1>`); continue; }
+    if ((m = line.match(/^\d+\.\s+(.+)$/))) {
+      flushPara();
+      if (inList !== 'ol') { flushList(); out.push('<ol>'); inList = 'ol'; }
+      out.push(`<li>${_inlineMd(m[1])}</li>`);
+      continue;
+    }
+    if ((m = line.match(/^[-*]\s+(.+)$/))) {
+      flushPara();
+      if (inList !== 'ul') { flushList(); out.push('<ul>'); inList = 'ul'; }
+      out.push(`<li>${_inlineMd(m[1])}</li>`);
+      continue;
+    }
+    if ((m = line.match(/^>\s?(.*)$/))) {
+      flushPara(); flushList();
+      out.push(`<blockquote>${_inlineMd(m[1])}</blockquote>`);
+      continue;
+    }
+
+    flushList();
+    para.push(line);
+  }
+  flushPara();
+  flushList();
+  return out.join('\n');
 }
 
-// ─── Polish ───────────────────────────────────
-async function wPolish() {
-  const content = wContent[wStage]?.trim();
-  if (!content || content.length < 30) { alert('請先寫返呢段先做 polish'); return; }
-  const s = STAGES[wStage];
-  wLoading = true;
-  const out = document.getElementById('w-ai-out');
-  const body = out?.querySelector('.ai-output-body');
-  if (out) {
-    out.style.display = 'block';
-    body.innerHTML = '<div class="tdots"><span></span><span></span><span></span></div>';
-  }
-  try {
-    const r = await API.call(
-      [{ role: 'user', content: `以下係用戶寫嘅 Substack post 「${s.label}」section（主題：${wTopic}）：
-
-${content}
-
-請用 editor 嘅角色：
-1. 評估 tone、structure、density
-2. 提出 2-3 個 specific 改進建議
-3. 提供一個改寫示範（保留用戶 voice）
-
-繁體中文，參考 BCG/McKinsey level 嘅 professional analysis tone，但保留 personal touch。` }],
-      '你係專業 Substack editor，幫用戶 polish 文章但保留佢嘅 voice。'
-    );
-    wAiOutput[wStage] = r;
-    if (body) body.innerHTML = fmt(r);
-  } catch (e) {
-    if (body) body.innerHTML = `<span style="color:var(--red)">${e.message}</span>`;
-  }
-  wLoading = false;
+function _inlineMd(s) {
+  return esc(s)
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
-// ─── Assemble Final Draft ────────────────────
-async function wAssemble() {
-  const fc = document.getElementById('w-final');
-  if (!fc) return;
-  if (!wContent.some(c => c.trim())) { alert('請先填寫各段內容'); return; }
-  fc.innerHTML = '<div class="ai-block loading">合成中… <div class="tdots" style="display:inline-flex"><span></span><span></span><span></span></div></div>';
-  try {
-    const sections = STAGES.map((s, i) => `## ${s.num}. ${s.label}\n${wContent[i] || '(空白)'}`).join('\n\n');
-    const r = await API.call(
-      [{ role: 'user', content: `以下係用戶嘅 Substack post draft（主題：${wTopic}），請合成做一篇連貫嘅 long-form post：
+// ─── 互動 handlers ─────────────────────────────────
 
-${sections}
+function switchWriterTab(tab) {
+  _wui.activeTab = tab;
+  _wui.viewingPostId = null;
+  _wui.editingPostId = null;
+  renderWriter();
+}
 
-要求：
-- 加返 title、subtitle、適當嘅小標題
-- 段落之間加 transition sentence 令文章 flow 順
-- 保留用戶嘅 voice、所有 citation 同數字
-- 末尾保留結尾段
-- 直接輸出完整 markdown，唔需要額外解釋
+function openWriterEditor(id) {
+  _wui.editingPostId = id;
+  _wui.viewingPostId = null;
+  renderWriter();
+}
 
-參考 BCG/McKinsey product breakdown 風格。` }],
-      '你係專業 Substack editor，將 sectioned draft 合成連貫文章。'
-    );
-    fc.innerHTML = `<div class="final-draft">${fmt(r)}</div>
-    <div class="btn-row" style="margin-top:12px">
-      <button class="btn btn-ghost btn-sm" onclick="wCopyFinal()">📋 複製到剪貼板</button>
-    </div>
-    <textarea id="w-final-raw" style="display:none">${esc(r)}</textarea>`;
-  } catch (e) {
-    fc.innerHTML = `<div style="color:var(--red)">${e.message}</div>`;
+function closeEditor() {
+  _wui.editingPostId = null;
+  renderWriter();
+}
+
+function viewPost(id) {
+  _wui.viewingPostId = id;
+  _wui.editingPostId = null;
+  renderWriter();
+}
+
+function closePost() {
+  _wui.viewingPostId = null;
+  renderWriter();
+}
+
+async function savePost(id, isNew) {
+  const title  = document.getElementById('ed-title').value.trim();
+  const date   = document.getElementById('ed-date').value;
+  const status = document.getElementById('ed-status').value;
+  const url    = document.getElementById('ed-url').value.trim();
+  const body   = document.getElementById('ed-body').value;
+
+  if (!title) { alert('請填標題'); return; }
+
+  const posts = Storage.getPosts();
+  if (isNew) {
+    posts.push({ id, status, title, date, body, substackUrl: url });
+  } else {
+    const i = posts.findIndex(p => p.id === id);
+    if (i >= 0) posts[i] = { ...posts[i], status, title, date, body, substackUrl: url };
   }
+  await Storage.setPosts(posts);
+  _wui.editingPostId = null;
+  _wui.activeTab = status;
+  renderWriter();
 }
 
-function wCopyFinal() {
-  const ta = document.getElementById('w-final-raw');
-  if (!ta) return;
-  navigator.clipboard.writeText(ta.value).then(() => alert('已複製！可直接 paste 入 Substack editor'));
-}
-
-// ─── References Generation ──────────────────
-async function wGenRefs() {
-  const fc = document.getElementById('w-final');
-  if (!fc) return;
-  fc.innerHTML = '<div class="ai-block loading">生成 references… <div class="tdots" style="display:inline-flex"><span></span><span></span><span></span></div></div>';
-  try {
-    const allContent = STAGES.map((s, i) => `[${s.label}]\n${wContent[i]}`).join('\n\n');
-    const r = await API.call(
-      [{ role: 'user', content: `以下係 Substack post 草稿（主題：${wTopic}）：
-
-${allContent}
-
-請抽取所有提到嘅 sources（研究、報告、學者、期刊），用 academic reference 格式列出：
-- 期刊文章：作者, 年份, 標題, 期刊
-- 市場報告：機構, 年份, 報告名
-- 書籍：作者, 年份, 書名
-
-繁體 + 英文標準格式。唔好杜撰，只列出文中有提到嘅 sources。` }],
-      '你係嚴謹嘅 academic editor，幫用戶整理 reference list。'
-    );
-    fc.innerHTML = `<div class="ai-block">${fmt(r)}</div>`;
-  } catch (e) {
-    fc.innerHTML = `<div style="color:var(--red)">${e.message}</div>`;
-  }
-}
-
-// ─── Export ──────────────────────────────────
-function wExport() {
-  const sections = STAGES.map((s, i) => `## ${s.num}. ${s.label}\n\n${wContent[i] || '(空白)'}`).join('\n\n---\n\n');
-  const md = `# ${wTopic || '(未命名)'}\n\n${sections}`;
-  const blob = new Blob([md], { type: 'text/markdown' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `substack-${(wTopic || 'draft').slice(0, 30)}.md`;
-  a.click();
-  URL.revokeObjectURL(url);
+async function deletePost(id) {
+  if (!confirm('真係要刪除呢個 post？')) return;
+  const posts = Storage.getPosts().filter(p => p.id !== id);
+  await Storage.setPosts(posts);
+  _wui.editingPostId = null;
+  renderWriter();
 }

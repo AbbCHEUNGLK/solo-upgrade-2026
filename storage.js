@@ -14,6 +14,7 @@ let _cache = {
   cert_prog:  {},
   posts_done: [],
   course_hl:  {},   // { c101: '整理咗嘅 markdown text', ... }
+  posts:      [],   // Substack posts archive: [{ id, status, title, date, body, substackUrl }, ...]
 };
 
 // ─── Supabase fetch helper ──────────────────────
@@ -47,6 +48,7 @@ const Storage = {
         _cache.cert_prog  = r.cert_prog  || {};
         _cache.posts_done = r.posts_done || [];
         _cache.course_hl  = r.course_hl  || {};
+        _cache.posts      = r.posts      || [];
       }
     } catch (e) {
       console.warn('Supabase load failed, using local cache:', e);
@@ -62,6 +64,7 @@ const Storage = {
         cert_prog:  _cache.cert_prog,
         posts_done: _cache.posts_done,
         course_hl:  _cache.course_hl,
+        posts:      _cache.posts,
         updated_at: new Date().toISOString(),
       });
     } catch (e) {
@@ -111,6 +114,15 @@ const Storage = {
   },
   async setCourseHighlights(v) {
     _cache.course_hl = v;
+    await this._save();
+  },
+
+  // ─── Substack Posts archive ────────────────
+  getPosts() {
+    return _cache.posts || [];
+  },
+  async setPosts(v) {
+    _cache.posts = v;
     await this._save();
   },
 };
