@@ -8,10 +8,10 @@
 
 **Repo:** `github.com/AbbCHEUNGLK/solo-upgrade-2026`
 **Live:** `abbcheunglk.github.io/solo-upgrade-2026`
-
 **Tech stack:** Vanilla HTML/CSS/JS（無 framework）· Supabase（cloud sync）· Claude API（in-app AI features）
 
 **File structure（根目錄 flat layout）:**
+
 ```
 index.html        — HTML 骨架
 style.css         — 所有樣式
@@ -28,6 +28,7 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 ### 1. Explore（搞清楚 context）
 
 開始任何改動之前，Claude 會：
+
 - 問清楚要改邊個 file、為咩要改
 - 如果 context 唔夠，主動問返我（唔好 assume）
 - 引用返我之前提過嘅 design decisions（唔好突然轉風格）
@@ -39,6 +40,7 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 ### 2. Plan（寫個 plan 俾我 review）
 
 任何超過 10 行嘅改動，Claude 會先出一個 plan：
+
 - 改邊幾個 file
 - 每個 file 改咩
 - 有冇 trade-off / breaking change
@@ -50,6 +52,7 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 ### 3. Code（寫 + 解釋）
 
 寫 code 嘅時候：
+
 - 一次改一個 concern（唔好 mix UI + logic + bug fix）
 - 解釋每個重要 decision 背後嘅 reasoning
 - 用我熟嘅 vocabulary（中英混合，唔需要過度 formal）
@@ -59,6 +62,7 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 ### 4. Commit（清楚交代點上 GitHub）
 
 每次改完，Claude 會明確講：
+
 - 邊個 file 要 overwrite / 新建
 - Commit message 建議用咩
 - 上 GitHub 之後點 verify（refresh app 應該見到咩）
@@ -68,6 +72,7 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 ## Context-Saving Rules
 
 ### ✅ Be Specific
+
 具體 prompt = 慳 context = 改得快 + 改得啱
 
 | ❌ Vague | ✅ Specific |
@@ -77,9 +82,11 @@ home.js / daily.js / session.js / ldr.js / writer.js / certs.js — 各頁面
 | 「整靚啲」 | 「sidebar 字細 1px、間距加 2px」 |
 
 ### ✅ Reference Existing Code
+
 唔好叫我「rewrite 個 daily page」如果你只係想改幾行——直接話「daily.js 第幾段嘅 TASKS 陣列加一個項目」。
 
 ### ✅ One Concern Per Turn
+
 一次 chat 講一件事。「同時改 UI + 加 feature + fix bug」會令 Claude 分散 attention，質量下降。
 
 ---
