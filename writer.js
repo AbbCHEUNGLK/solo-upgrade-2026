@@ -22,10 +22,23 @@ function renderWriter() {
   return _renderList();
 }
 
+// ─── 合併 file-sourced + Supabase posts ──────────
+
+function _allPosts() {
+  // File posts（read-only，從 posts/manifest.js 嚟）— 標記 source: 'file'
+  const filePosts = (window.PUBLISHED_POSTS || []).map(p => ({ ...p, source: 'file' }));
+  const fileIds = new Set(filePosts.map(p => p.id));
+  // Supabase posts — 如果 ID 同 file 衝突，file 嘅 wins
+  const supabasePosts = Storage.getPosts()
+    .filter(p => !fileIds.has(p.id))
+    .map(p => ({ ...p, source: 'supabase' }));
+  return [...filePosts, ...supabasePosts];
+}
+
 // ─── List view (3 tabs + post cards) ───────────────
 
 function _renderList() {
-  const posts = Storage.getPosts();
+  const posts = _allPosts();
   const counts = {
     published: posts.filter(p => p.status === 'published').length,
     drafting:  posts.filter(p => p.status === 'drafting').length,
@@ -70,10 +83,11 @@ function _postCard(post) {
   const snippet = body.replace(/^#+\s/gm, '').replace(/^[-*]\s/gm, '').replace(/^\d+\.\s/gm, '').trim().slice(0, 180);
   const wc = body.replace(/\s/g, '').length;
   const hasUrl = post.substackUrl && post.substackUrl.trim();
+  const isFile = post.source === 'file';
 
   return `
   <div class="post-card" onclick="viewPost('${post.id}')">
-    <div class="post-card-title">${esc(post.title || '(未命名)')}</div>
+    <div class="post-card-title">${esc(post.title || '(未命名)')}${isFile ? ' <span class="post-card-locked" title="由 posts/manifest.js 管理，需要喺 Cowork chat 改">🔒</span>' : ''}</div>
     <div class="post-card-meta">
       <span>${esc(post.date || '無日期')}</span>
       ${wc > 0 ? `<span>· 約 ${wc.toLocaleString()} 字</span>` : ''}
@@ -81,7 +95,7 @@ function _postCard(post) {
     ${snippet ? `<div class="post-card-snippet">${esc(snippet)}…</div>` : ''}
     <div class="post-card-actions" onclick="event.stopPropagation()">
       ${hasUrl ? `<a class="post-card-link" href="${esc(post.substackUrl)}" target="_blank" rel="noopener">↗ Substack</a>` : ''}
-      <button class="post-card-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>
+      ${isFile ? '' : `<button class="post-card-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>`}
     </div>
   </div>`;
 }
@@ -89,10 +103,11 @@ function _postCard(post) {
 // ─── Reader view ───────────────────────────────────
 
 function _renderReader() {
-  const post = Storage.getPosts().find(p => p.id === _wui.viewingPostId);
+  const post = _allPosts().find(p => p.id === _wui.viewingPostId);
   if (!post) { _wui.viewingPostId = null; return renderWriter(); }
 
   const hasUrl = post.substackUrl && post.substackUrl.trim();
+  const isFile = post.source === 'file';
 
   document.getElementById('page-area').innerHTML = `
 <div class="reader-view">
@@ -100,7 +115,7 @@ function _renderReader() {
     <button class="reader-back" onclick="closePost()">← 返回</button>
     <div class="reader-toolbar-right">
       ${hasUrl ? `<a class="reader-substack" href="${esc(post.substackUrl)}" target="_blank" rel="noopener">↗ Substack 原文</a>` : ''}
-      <button class="reader-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>
+      ${isFile ? '<span class="reader-locked" title="呢個 post 由 posts/manifest.js 管理，要 edit 請去 Cowork chat 同 Claude 講">🔒 file-sourced</span>' : `<button class="reader-edit" onclick="openWriterEditor('${post.id}')">✏️ 編輯</button>`}
     </div>
   </div>
   <article class="reader-article">
@@ -119,6 +134,15 @@ function _renderEditor() {
   const post = isNew
     ? { id: 'p' + Date.now(), status: _wui.activeTab, title: '', date: new Date().toISOString().slice(0, 10), body: '', substackUrl: '' }
     : posts.find(p => p.id === _wui.editingPostId);
+  // 如果 file-sourced post，唔可以 edit — 跳返出去
+  if (!post && _wui.editingPostId !== 'new') {
+    const filePost = (window.PUBLISHED_POSTS || []).find(p => p.id === _wui.editingPostId);
+    if (filePost) {
+      alert('呢個 post 由 posts/manifest.js 管理，要 edit 請去 Cowork chat 同 Claude 講。');
+      _wui.editingPostId = null;
+      return renderWriter();
+    }
+  }
   if (!post) { _wui.editingPostId = null; return renderWriter(); }
 
   document.getElementById('page-area').innerHTML = `

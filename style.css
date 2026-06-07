@@ -885,6 +885,21 @@ textarea.inp::placeholder, input.inp::placeholder { color: var(--text3); }
   border-color: var(--orange);
   color: var(--orange);
 }
+.post-card-locked {
+  font-size: 12px;
+  margin-left: 4px;
+  opacity: .55;
+  cursor: help;
+}
+.reader-locked {
+  font-size: 11.5px;
+  color: var(--text3);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: help;
+}
 
 /* ─── Empty state ───────────────────────────── */
 
