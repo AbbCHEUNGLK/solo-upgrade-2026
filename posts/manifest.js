@@ -188,12 +188,20 @@ window.JOURNAL = {
 - Calendar widget + day detail，by date 揭返每日 record
 - Sidebar streak widget 換成 daily streak counter
 - Files-as-source-of-truth：published posts 由 \`posts/manifest.js\` 直接 source
+- Home page 重整：cards stacked、auto-select today、journal markdown
+- **新 Output：Thread subpage**——short-form post archive，同 Substack 並列
 
 ## 第 1 篇進咗 archive
 
 > 一勺香草雪糕的解構：四個維度、三組研究，與一段被低估的童年記憶
 
 ✓ 已 backfill 入 manifest.js，喺 已發佈 tab 見到
+
+## 今日 Thread 第 1 篇
+
+> 李堅翔博士曾寫過一段很溫柔的話：「你無法選擇被不被愛，但可以選擇怎麼愛，包括以慈悲喜捨去愛惜受傷的自己。」
+
+✓ 已記入 \`window.THREAD_POSTS\` — 喺新 🧵 Thread page 見到（記得補 Threads URL）
 
 ## 揾到嘅 architecture insight
 
@@ -210,4 +218,21 @@ Drafting 同 brainstorm 喺 Cowork chat 發生 → 結晶化嘅內容 commit 落
 - 將 long-term goals / TASKS 都 migrate 去 file-based pattern？
 - Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping`,
 };
+
+// ─── Thread posts（short-form）────────────────────
+// 同 Substack 嘅 long-form 唔同：簡短、即興、quote / reflection 為主
+// 每個 entry: { id, date, content (markdown), threadsUrl }
+// 由我喺 Cowork chat 直接 maintain
+
+window.THREAD_POSTS = [
+  {
+    id: 'thread-2026-06-07-li',
+    date: '2026-06-07',
+    content: `李堅翔博士曾寫過一段很溫柔的話：
+
+> 你無法選擇被不被愛，但可以選擇怎麼愛，包括以慈悲喜捨去愛惜受傷的自己。`,
+    threadsUrl: '',  // ← 補返 Threads URL 過嚟我加入
+  },
+];
+
 

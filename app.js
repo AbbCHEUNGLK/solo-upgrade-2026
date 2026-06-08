@@ -6,6 +6,7 @@ const PAGE_NAMES = {
   session: 'Storytelling Session',
   ldr:     'Learn → Re-tell',
   writer:  'Substack Writer',
+  thread:  'Thread',
   certs:   '專業認證',
 };
 
@@ -34,6 +35,7 @@ function go(page) {
     session: renderSession,
     ldr:     renderLDR,
     writer:  renderWriter,
+    thread:  renderThread,
     certs:   renderCerts,
   })[page]?.();
   updateTopProgress();
