@@ -235,4 +235,34 @@ window.THREAD_POSTS = [
   },
 ];
 
+// ─── Storytelling Session archive ─────────────────
+// 4-phase (熱身 / 結構 / 細節 / 整合) 練習嘅 session log
+// 每個 entry: { id, date, topic, body (markdown) }
+// 由我喺 Cowork chat 直接 maintain，每次練完寫返入
+
+window.STORYTELLING_SESSIONS = [
+  // 範例（之後我哋實際練完會 replace）：
+  // {
+  //   id: 'storytelling-2026-06-08',
+  //   date: '2026-06-08',
+  //   topic: '最近印象深刻的事',
+  //   body: `## 熱身\n...\n\n## 結構\n...\n\n## 細節\n...\n\n## 整合\n...`,
+  // },
+];
+
+// ─── Learn → Re-tell archive ──────────────────────
+// Feynman Technique 4-step (INPUT / DIGEST / RE-TELL / FEEDBACK)
+// 每個 entry: { id, date, source, body (markdown) }
+
+window.RETELL_SESSIONS = [
+  // 範例：
+  // {
+  //   id: 'retell-2026-06-08',
+  //   date: '2026-06-08',
+  //   source: 'Veritasium · Why we love nostalgia',
+  //   body: `## Input\n...\n\n## Digest\n...\n\n## Re-tell\n...\n\n## Feedback\n...`,
+  // },
+];
+
+
 
