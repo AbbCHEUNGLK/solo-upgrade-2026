@@ -181,7 +181,7 @@ window.PUBLISHED_POSTS = [
 // 同 insight，commit + push 就喺 calendar 日詳細 panel 入面 show。
 
 window.JOURNAL = {
-  '2026-06-07': `## 今日 build 咗
+  '2026-06-08': `## 今日 build 咗
 
 - 認證 page 重新 design：3 個 section 統一用 accordion card pattern
 - Substack Writer 大改：3 tabs archive / reader / editor，markdown rendering
@@ -276,8 +276,8 @@ Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
 
 window.THREAD_POSTS = [
   {
-    id: 'thread-2026-06-07-li',
-    date: '2026-06-07',
+    id: 'thread-2026-06-08-li',
+    date: '2026-06-08',
     content: `李堅翔博士曾寫過一段很溫柔的話：
 
 > 你無法選擇被不被愛，但可以選擇怎麼愛，包括以慈悲喜捨去愛惜受傷的自己。`,
@@ -306,13 +306,13 @@ window.STORYTELLING_SESSIONS = [
 
 window.RETELL_SESSIONS = [
   {
-    id: 'retell-2026-06-07-cowork-101',
-    date: '2026-06-07',
+    id: 'retell-2026-06-08-cowork-101',
+    date: '2026-06-08',
     source: 'Anthropic Skilljar · Introduction to Claude Cowork',
     body: `## Input
 
 - **Source:** Anthropic Skilljar · Introduction to Claude Cowork
-- **Completed:** 2026-06-07
+- **Completed:** 2026-06-08
 - **Format:** Self-paced video + reading
 
 ## Digest
