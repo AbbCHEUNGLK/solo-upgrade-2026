@@ -29,6 +29,13 @@ async function _sbFetch(method, body) {
     },
     body: body ? JSON.stringify(body) : undefined,
   });
+  // Critical: fetch() 唔會 throw on HTTP error，要手動 check
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '(no body)');
+    const err = new Error(`Supabase ${method} ${res.status}: ${errText}`);
+    console.error('🔴 Supabase request failed:', { status: res.status, body: errText });
+    throw err;
+  }
   return res;
 }
 
