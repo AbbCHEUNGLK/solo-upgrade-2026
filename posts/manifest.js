@@ -219,12 +219,29 @@ Anthropic Skilljar 嘅「Introduction to Claude Cowork」課程今日完成。
 
 \`certs.js\` 入面 \`ccw\` 嘅 base 由 30 改到 100，🎓 Anthropic Skilljar Courses section 而家應該顯示 3/3 完成。
 
+## 鞏固：Skills / Connectors / Plugins 嘅 mental anchor
+
+Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
+
+- **Skill = verb**（Claude 識做嘅 task）— procedural recipe，\`/name\` trigger，self-contained instructions
+- **Connector = reach**（Claude 摸得到嘅 external system）— MCP server，authenticated access，提供 tool calls
+- **Plugin = pre-assembled kit**（按 domain 打包嘅 skills + connectors）
+
+三者關係：**Skill 跑嗰陣可能會 call Connector 攞 real data；Plugin 將適合一個 role 嘅 skills + connectors 一次過分發**。
+
+跑 \`/draft-outreach\`（Sales plugin 嘅 skill）= Skill 係 recipe，期間 call HubSpot connector 攞 prospect context，Plugin 係嗰個將 skills + connectors 一次過 install 嘅 wrapper。
+
+**Cooking analogy 鎖實：**
+- Skill = 食譜
+- Connector = 雪櫃 + 街市 access
+- Plugin = 主題食譜書 + 配套 grocery account（譬如「意大利菜 starter pack」）
+
 ## 下一步可以諗
 
 - 中醫 5 行 篇—— 揀 Hook angle 然後一齊寫
 - 將 long-term goals / TASKS 都 migrate 去 file-based pattern？
 - Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping
-- 用 Claude Cowork 課程內容做 Re-tell session 嘅第一個 entry（test 埋個 ldr.js archive）`,
+- 用 Claude Cowork 課程內容做 Re-tell session 嘅第一個 entry（test 埋個 ldr.js archive）✓`,
 };
 
 // ─── Thread posts（short-form）────────────────────
