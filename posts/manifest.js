@@ -231,7 +231,7 @@ window.THREAD_POSTS = [
     content: `李堅翔博士曾寫過一段很溫柔的話：
 
 > 你無法選擇被不被愛，但可以選擇怎麼愛，包括以慈悲喜捨去愛惜受傷的自己。`,
-    threadsUrl: '',  // ← 補返 Threads URL 過嚟我加入
+    threadsUrl: 'https://www.threads.com/@_aura.laia_/post/DZT0C70CAAQ?xmt=AQG0qd06mT1Cdw7RXTlcAki0D6p-FoES8piCjXSjhXckBg',
   },
 ];
 
