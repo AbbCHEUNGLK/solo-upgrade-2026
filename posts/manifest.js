@@ -212,11 +212,19 @@ Drafting 同 brainstorm 喺 Cowork chat 發生 → 結晶化嘅內容 commit 落
 - App = clean, structured, version-controlled reader
 - Cowork chat = messy, iterative, infinitely flexible writer
 
+## ✅ Claude Cowork course 完成
+
+Anthropic Skilljar 嘅「Introduction to Claude Cowork」課程今日完成。
+有趣嘅 timing：**早上學課程，下晝同夜晚就將學到嘅 pattern 直接落地**——build 出嚟個 file-based archive、journal panel、Thread page、accordion certs 全部都係 Cowork-driven 工作流嘅 instance。Best possible validation。
+
+\`certs.js\` 入面 \`ccw\` 嘅 base 由 30 改到 100，🎓 Anthropic Skilljar Courses section 而家應該顯示 3/3 完成。
+
 ## 下一步可以諗
 
 - 中醫 5 行 篇—— 揀 Hook angle 然後一齊寫
 - 將 long-term goals / TASKS 都 migrate 去 file-based pattern？
-- Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping`,
+- Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping
+- 用 Claude Cowork 課程內容做 Re-tell session 嘅第一個 entry（test 埋個 ldr.js archive）`,
 };
 
 // ─── Thread posts（short-form）────────────────────

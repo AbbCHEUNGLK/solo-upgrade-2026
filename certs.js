@@ -13,7 +13,7 @@ const CERTS = [
 const COURSES = [
   { id:'c101',  logo:'🎓', name:'Claude 101',       sub:'Anthropic Skilljar', base:100 },
   { id:'cc101', logo:'⌨️', name:'Claude Code 101',  sub:'Anthropic Skilljar', base:100 },
-  { id:'ccw',   logo:'🤝', name:'Claude Cowork',    sub:'Anthropic Skilljar', base:30  },
+  { id:'ccw',   logo:'🤝', name:'Claude Cowork',    sub:'Anthropic Skilljar', base:100 },
 ];
 
 const POSTS = [
