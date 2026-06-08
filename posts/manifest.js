@@ -236,6 +236,31 @@ Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
 - Connector = 雪櫃 + 街市 access
 - Plugin = 主題食譜書 + 配套 grocery account（譬如「意大利菜 starter pack」）
 
+## Bug post-mortem — JSONB \`[]\` vs \`{}\` silent fail
+
+**Symptom：** 每次 check task 都似 save 咗（fetch 200 OK，UI 即時更新），但 hard refresh 之後 records 全部消失。
+
+**Root cause：**
+- Supabase \`tasks_done\` column 嘅 default value 係 \`[]\`（array），但 app code 用 object pattern：\`_cache.tasks_done['2026-06-08'] = [...]\`
+- JS 入面 array 都係 object，可以接受 string key assignment——**in-memory 完全 work，UI 即時更新，所以好難察覺**
+- 但 \`JSON.stringify\` 喺 array 上面只 serialize numeric indices，所有 string key properties 被默默 drop 掉
+- POST body 永遠 send \`tasks_done: []\` → Supabase 覆蓋舊資料 → 從來冇真正 persist
+
+**Why silent：** \`fetch()\` 唔會 throw on HTTP error，更加唔會 throw on 200 OK。原本嘅 try/catch 對任何 4xx / 200-empty response 都係廢嘅。
+
+**Detection breakthrough：** 加 verbose request/response logging 之後，見到 Supabase return body 入面 \`tasks_done: []\`——即係 server 真係 receive 咗空 array，問題喺 client 送出去嗰 step。combine 你問「\`{}\` 同 \`[]\` 有冇影響？」直接 narrow 到 array-vs-object 嘅 JSON serialize 行為。
+
+**Fix：**
+1. SQL \`UPDATE\` 將 \`tasks_done\` / \`streak\` / \`course_hl\` 由 \`[]\` 改返 \`{}\`
+2. \`_sbFetch\` 加 \`res.ok\` check + throw on HTTP error
+
+**3 個 lessons：**
+1. **JSONB default value 一定要同 JS data shape 對齊**——\`[]\` 同 \`{}\` 喺 jsonb 入面類型唔同，serialize 行為完全唔同
+2. **永遠手動 check \`res.ok\`**——\`fetch()\` 只 throw on network failure，HTTP error 要自己 catch
+3. **Fail loudly > fail silently**——silent failure 係最危險嘅 bug type，比 crash 更難 detect
+
+**Meta lesson：** Engineer 嘅 stack trace 同 PM 嘅 type intuition 有時係互補嘅。我一直 trace error path / RLS / grants，但你直接 spot 到「個 value 個 shape 唔對」就過骨咗。
+
 ## 下一步可以諗
 
 - 中醫 5 行 篇—— 揀 Hook angle 然後一齊寫
