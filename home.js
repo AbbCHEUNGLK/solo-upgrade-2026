@@ -4,6 +4,7 @@
 const _homeUI = {
   viewedYM: null,       // 'YYYY-MM'；null = 今月
   selectedDate: null,   // 'YYYY-MM-DD'；null = 冇 cell 揀
+  firstRender: true,    // 第一次 render 自動揀今日
 };
 
 function _currentViewedYM() {
@@ -78,12 +79,13 @@ function _renderDayDetail() {
   const todayKey = new Date().toISOString().slice(0, 10);
   const isFuture = date > todayKey;
   const taskIndices = Storage.getTasksDone(date);
+  const journalEntry = (typeof window.JOURNAL !== 'undefined' && window.JOURNAL[date]) || null;
 
-  let body;
+  let taskSection;
   if (isFuture) {
-    body = `<div class="day-detail-empty">仲未到嘅一日 🌱</div>`;
+    taskSection = `<div class="day-detail-empty">仲未到嘅一日 🌱</div>`;
   } else if (taskIndices.length === 0) {
-    body = `<div class="day-detail-empty">呢日仲未完成任何任務</div>`;
+    taskSection = `<div class="day-detail-empty">呢日仲未完成任何任務</div>`;
   } else {
     const items = taskIndices.map(i => {
       const t = (typeof TASKS !== 'undefined') ? TASKS[i] : null;
@@ -91,9 +93,25 @@ function _renderDayDetail() {
       const tag = t && t.tag ? `<span class="day-detail-tag tag-${t.tagClass ? t.tagClass.replace('tag-','') : 'comm'}">${t.tag}</span>` : '';
       return `<div class="day-detail-task">✓ <span class="day-detail-task-name">${name}</span> ${tag}</div>`;
     }).join('');
-    body = `
+    taskSection = `
       <div class="day-detail-summary">完成 ${taskIndices.length}/${NTASKS} 任務</div>
       <div class="day-detail-tasks">${items}</div>
+    `;
+  }
+
+  // Journal section（如果有 entry）
+  let journalSection = '';
+  if (journalEntry) {
+    const renderedMd = (typeof _renderMarkdown !== 'undefined') ? _renderMarkdown(journalEntry) : `<pre>${esc(journalEntry)}</pre>`;
+    journalSection = `
+      <div class="day-detail-journal-divider"></div>
+      <div class="day-detail-journal-label">📔 今日日記</div>
+      <div class="day-detail-journal">${renderedMd}</div>
+    `;
+  } else if (date === todayKey) {
+    journalSection = `
+      <div class="day-detail-journal-divider"></div>
+      <div class="day-detail-journal-empty">📔 今日仲未有日記 — 喺 Cowork chat 同我傾完，我寫入 manifest</div>
     `;
   }
 
@@ -103,7 +121,8 @@ function _renderDayDetail() {
       <div class="day-detail-date">${date}</div>
       <button class="day-detail-close" onclick="calSelect(null)">×</button>
     </div>
-    ${body}
+    ${taskSection}
+    ${journalSection}
   </div>`;
 }
 
@@ -129,6 +148,12 @@ function renderHome() {
   const now = new Date();
   const g = now.getHours() < 12 ? '早安' : (now.getHours() < 18 ? '下午好' : '晚上好');
   const dateStr = now.toLocaleDateString('zh-HK', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+  // 第一次 render 自動揀今日，等 day detail panel 一打開就顯示今日 review
+  if (_homeUI.firstRender) {
+    _homeUI.firstRender = false;
+    if (!_homeUI.selectedDate) _homeUI.selectedDate = now.toISOString().slice(0, 10);
+  }
 
   document.getElementById('page-area').innerHTML = `
 <div class="page-home">

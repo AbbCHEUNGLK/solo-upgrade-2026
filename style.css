@@ -1284,6 +1284,105 @@ textarea.inp::placeholder, input.inp::placeholder { color: var(--text3); }
 .home-cal-aside .day-detail-summary { font-size: 11.5px; }
 .home-cal-aside .day-detail-task { font-size: 12px; }
 .home-cal-aside .day-detail-task-name { font-size: 12px; line-height: 1.4; }
+
+/* ─── 解決「逼」：home cards 喺 quick row 內部改 vertical stack ─── */
+.home-quick-row .home-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+}
+.home-quick-row .home-card {
+  padding: 16px 18px;
+}
+.home-quick-row .hc-icon {
+  font-size: 22px;
+  display: inline-block;
+  margin-right: 4px;
+}
+.home-quick-row .hc-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+.home-quick-row .hc-sub {
+  font-size: 12.5px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* ─── Journal markdown 喺 day detail 入面 ─── */
+.day-detail-journal-divider {
+  border-top: 1px dashed var(--border);
+  margin: 14px -2px 12px;
+}
+.day-detail-journal-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.day-detail-journal-empty {
+  font-size: 12px;
+  color: var(--text3);
+  padding: 10px 12px;
+  background: var(--bg2);
+  border-radius: 6px;
+  line-height: 1.5;
+}
+.day-detail-journal {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text);
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.day-detail-journal h1,
+.day-detail-journal h2 {
+  font-family: 'Lora', serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 14px 0 6px;
+  letter-spacing: -.005em;
+  color: var(--text);
+}
+.day-detail-journal h3 {
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 10px 0 4px;
+  color: var(--text);
+}
+.day-detail-journal p { margin: 0 0 8px; }
+.day-detail-journal ul,
+.day-detail-journal ol {
+  padding-left: 18px;
+  margin: 4px 0 10px;
+}
+.day-detail-journal li { margin-bottom: 3px; }
+.day-detail-journal strong { font-weight: 600; }
+.day-detail-journal a {
+  color: var(--orange);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.day-detail-journal blockquote {
+  border-left: 2px solid var(--orange);
+  padding: 2px 0 2px 10px;
+  margin: 8px 0;
+  color: var(--text2);
+  font-style: italic;
+}
+.day-detail-journal code {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-size: 11.5px;
+  font-family: 'Menlo', 'Monaco', monospace;
+}
 @keyframes dayDetailIn {
   from { opacity: 0; transform: translateY(-4px); }
   to   { opacity: 1; transform: translateY(0); }

@@ -175,3 +175,39 @@ window.PUBLISHED_POSTS = [
 10. Epicurious (2024). Pro Chefs Blind Taste Test Every Vanilla Ice Cream | The Taste Panel. YouTube.`,
   },
 ];
+
+// ─── Daily journal / brainstorm ─────────────────────────
+// Keyed by date (YYYY-MM-DD). 我喺 Cowork chat 每日寫一篇 summary
+// 同 insight，commit + push 就喺 calendar 日詳細 panel 入面 show。
+
+window.JOURNAL = {
+  '2026-06-07': `## 今日 build 咗
+
+- 認證 page 重新 design：3 個 section 統一用 accordion card pattern
+- Substack Writer 大改：3 tabs archive / reader / editor，markdown rendering
+- Calendar widget + day detail，by date 揭返每日 record
+- Sidebar streak widget 換成 daily streak counter
+- Files-as-source-of-truth：published posts 由 \`posts/manifest.js\` 直接 source
+
+## 第 1 篇進咗 archive
+
+> 一勺香草雪糕的解構：四個維度、三組研究，與一段被低估的童年記憶
+
+✓ 已 backfill 入 manifest.js，喺 已發佈 tab 見到
+
+## 揾到嘅 architecture insight
+
+App 唔再係「draft + publish 嘅 tool」，而係 **published content 嘅 reader + 進度 tracker**。
+Drafting 同 brainstorm 喺 Cowork chat 發生 → 結晶化嘅內容 commit 落 file。
+
+呢個分工令兩邊都做得好啲：
+- App = clean, structured, version-controlled reader
+- Cowork chat = messy, iterative, infinitely flexible writer
+
+## 下一步可以諗
+
+- 中醫 5 行 篇—— 揀 Hook angle 然後一齊寫
+- 將 long-term goals / TASKS 都 migrate 去 file-based pattern？
+- Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping`,
+};
+
