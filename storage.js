@@ -20,23 +20,23 @@ let _cache = {
 // ─── Supabase fetch helper ──────────────────────
 async function _sbFetch(method, body) {
   const url = `${SUPABASE_URL}/rest/v1/progress?user_id=eq.${USER_ID}`;
-  console.log(`🟦 Supabase ${method} request`, body ? { keys: Object.keys(body), tasks_done_sample: body.tasks_done } : '(no body)');
   const res = await fetch(url, {
     method,
     headers: {
       'apikey':        SUPABASE_KEY,
       'Authorization': 'Bearer ' + SUPABASE_KEY,
       'Content-Type':  'application/json',
-      'Prefer':        method === 'POST' ? 'resolution=merge-duplicates,return=representation' : 'return=minimal',
+      'Prefer':        method === 'POST' ? 'resolution=merge-duplicates' : 'return=minimal',
     },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const respText = await res.text().catch(() => '(no body)');
-  console.log(`${res.ok ? '🟢' : '🔴'} Supabase ${method} response`, { status: res.status, body: respText.slice(0, 500) });
+  // fetch() 唔會 throw on HTTP error，要手動 check
   if (!res.ok) {
-    throw new Error(`Supabase ${method} ${res.status}: ${respText}`);
+    const errText = await res.text().catch(() => '(no body)');
+    console.error('🔴 Supabase request failed:', { status: res.status, body: errText });
+    throw new Error(`Supabase ${method} ${res.status}: ${errText}`);
   }
-  return { ok: true, text: respText };
+  return res;
 }
 
 // ─── 啟動時從雲端載入 ──────────────────────────
