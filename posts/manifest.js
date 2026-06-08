@@ -263,13 +263,61 @@ window.STORYTELLING_SESSIONS = [
 // 每個 entry: { id, date, source, body (markdown) }
 
 window.RETELL_SESSIONS = [
-  // 範例：
-  // {
-  //   id: 'retell-2026-06-08',
-  //   date: '2026-06-08',
-  //   source: 'Veritasium · Why we love nostalgia',
-  //   body: `## Input\n...\n\n## Digest\n...\n\n## Re-tell\n...\n\n## Feedback\n...`,
-  // },
+  {
+    id: 'retell-2026-06-07-cowork-101',
+    date: '2026-06-07',
+    source: 'Anthropic Skilljar · Introduction to Claude Cowork',
+    body: `## Input
+
+- **Source:** Anthropic Skilljar · Introduction to Claude Cowork
+- **Completed:** 2026-06-07
+- **Format:** Self-paced video + reading
+
+## Digest
+
+### Cowork 同普通 AI chat 嘅最大 difference
+
+- **Chat 平台**（ChatGPT / Claude.ai web）= 偏 isolated，主要係 individual learning / content generation，分享靠 manual copy-paste
+- **Cowork** = 真正可以**交付 project** 嘅 platform — 同 team + AI agent 一齊建 workflow，day-to-day operational
+
+> 一句精煉版："Cowork 唔係齋傾偈嘅 Claude，係可以真正同你一齊做完一個 project 嘅 Claude。"
+
+### 三個 building block 嘅 mental map
+
+- **Skills** → Framework 一啲，你 expect agent 有咩 skillset / persona / 行為
+- **Connectors** → Claude 點同其他 tool 溝通；access grant 嘅機制
+- **Plugins** → 喺其他 tool 嘅 interface 入面，Claude 點幫你
+
+### 課程比自己摸索贏喺邊
+
+> "It's something that I can explore by myself, but the course gave me a more comprehensive overview."
+
+Framework 加埋 **revision / evals 嘅 iteration cycle** — 靠自己 trial-and-error 慢慢揾到，但課程一次過 frame 晒，省好多時間。
+
+## Re-tell
+
+> 「Cowork 即係將 ChatGPT 嘅 isolated chat experience 升級成 collaborative project delivery platform — Claude 可以開檔案、可以 connect 其他 tool、可以 follow 一套既定 workflow，跨 session 都記住你嘅 context。」
+
+## Feedback（gap spot — 可以返去 review 嘅地方）
+
+**① "Skill" ≈ procedural workflow，唔係 persona**
+
+你形容 Skill 係 "characters and persona"，但其實 Skill 接近 **how-to template / procedural recipe** — 譬如「寫 PRD」「做 sprint planning」係 skill，係步驟 + context，唔係角色。Persona / character 一般喺 system prompt 層面；每個 skill 入面可能有唔同 persona，但 skill 本身嘅核心係 "do this process"。
+
+**② Plugin 嘅定義可以再 sharpen**
+
+你話 Plugin 係「喺其他 tool interface 入面 Claude 點幫你」 — 但 Plugin 其實係 **bundle of Skills + Connectors，packaged for a specific domain**。譬如「Sales」plugin = sales 相關 skills（draft outreach, call prep, etc.）+ relevant connectors（HubSpot, Salesforce）。Plugin 係 **distribution unit**，唔係「Claude embedded in another app」。
+
+**③ 你 missed 咗一個 concept，但其實今日 build 咗：persistent project context**
+
+Q4 答 file-based architecture 嗰陣，你講「reviewing previous work + 跟住 guidelines we set previously」 — 呢個正係 Cowork 教嘅 **memory / project context** pattern。\`CLAUDE.md\`、\`posts/manifest.js\` 呢類 files 喺 Cowork 入面係 **durable layer**，跨 session 存在。你今日 build 嘅嘢 = 將呢個 pattern 推到極致（不止 rules，連 content 都係 files）。
+
+## 下次 review 時想再消化嘅 3 樣
+
+1. **Skill description 嘅 trigger phrasing** — 點寫 description 令 Claude 喺啱嘅時候 invoke
+2. **Plugin marketplace** — 邊啲 plugin 真正 fit 你 PM workflow
+3. **Memory tiers** — short-term context window vs long-term files vs Supabase 雲端 storage 嘅 trade-off`,
+  },
 ];
 
 
