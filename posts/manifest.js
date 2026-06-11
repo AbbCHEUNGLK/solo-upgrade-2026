@@ -261,9 +261,25 @@ Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
 
 **Meta lesson：** Engineer 嘅 stack trace 同 PM 嘅 type intuition 有時係互補嘅。我一直 trace error path / RLS / grants，但你直接 spot 到「個 value 個 shape 唔對」就過骨咗。
 
+## 今日 content output
+
+**Thread 第 2 篇上線（Production Mode vs Campfire Mode）**
+> 「我哋治好咗黑夜，卻不小心殺死咗營火。」
+
+引用 Polly Wiessner *PNAS* 2014 嘅 Ju/'hoansi Bushmen firelight talk 研究——日間對話 100% 務實，圍火夜談 81% 變 storytelling。用嚟對照當代 24 小時生產模式嘅孤獨。完成今日「Article → 啟發總結」嘅 daily task。
+
+**中醫 5 行 Substack 篇 — full draft 完成（~4,800 字）**
+- Hook：WHO ICD-11 + Network Medicine + 暗粒個人 anchor
+- Framework：五行五臟係 ecosystem 5 個 functional subsystem，生剋 cycle 解 cascade
+- Science：5 臟 vs gut-brain / HPA / autonomic / HRV / lung-skin axis 對應 18 條 verifiable citation
+- Counter-intuitive：西醫精準介入 vs 中醫 vague maintenance，後者其實係 compressed knowledge
+- 5 個 daily ecosystem habits + 暗粒 callback closer
+
+下一步：放入 \`在寫 (drafting)\` tab，polish 之後 publish 上 Substack → promote 去 已發佈。
+
 ## 下一步可以諗
 
-- 中醫 5 行 篇—— 揀 Hook angle 然後一齊寫
+- 中醫 5 行 篇 draft → polish → publish ✓ 等 ship
 - 將 long-term goals / TASKS 都 migrate 去 file-based pattern？
 - Journal 自動化：Cowork session 完之後我自動 update 今日 entry，唔需要 manual ping
 - 用 Claude Cowork 課程內容做 Re-tell session 嘅第一個 entry（test 埋個 ldr.js archive）✓`,
@@ -275,6 +291,49 @@ Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
 // 由我喺 Cowork chat 直接 maintain
 
 window.THREAD_POSTS = [
+  {
+    id: 'thread-2026-06-08-firelight',
+    date: '2026-06-08',
+    content: `有冇諗過，人點解係夜晚特別容易講真心話？
+
+人類學家 Polly Wiessner 曾研究未有電力照明嘅原始部落，佢記錄咗日頭同夜晚嘅對話，發現一個 fascinating 嘅現象：
+
+日頭嘅對話，幾乎全部係「正經事」——邊度有食物、資源點分、邊個做錯咗嘢、邊個要被批評。全部都係務實、理性、解決問題。
+
+但到咗夜晚，圍住火堆之後——**81% 嘅對話，變成咗 storytelling**。
+
+唔再講邊個欠咗邊個，而係：
+
+- 講遠方部落嘅故事
+- 講死去嘅亡魂
+- 講神靈、夢境、傳說
+- 講笑話、唱歌、跳舞
+
+純粹為咗「連結」而對話，唔為任何實際利益。
+
+---
+
+日頭，我哋處於「生產模式（Production Mode）」——所有人嘅目光、表情、比較、社會階級，全部都一覽無遺。你要應付現實，要理性、要 defend 自己、要有效率。
+
+但當太陽落山，視覺上嘅曝光感消失咗。黑暗俾咗我哋一種 coverage。營火升起，喺呢個半遮半掩嘅空間，世界瞬間縮小到只剩低火光照亮嘅一小撮人。我哋先夠膽放低防衛，講啲日頭唔會講嘅嘢——軟弱、遺憾、渴望、荒誕嘅夢、心底嘅情感。
+
+呢個，係人類幾百萬年嚟進化出嚟嘅 bonding 本能。
+
+---
+
+然而，LED 同手機正喺度驅逐黑夜。
+
+我哋將「日頭嘅生存理性」無限延伸到凌晨兩點嘅 message、email、social media 裡面。理性唔識收工，24 小時都係生產模式。
+
+然後又回過頭嚟，百思不得其解：點解自己活得咁孤獨、咁疏離？
+
+突然諗起細個用被竇搭出嚟嘅小帳篷，同朋友匿埋入面講心事、講鬼故、講秘密。
+
+而家先明——嗰陣可能唔係細路仔玩泥沙，而係 DNA 喺度教緊我，點樣連結彼此。
+
+> 我哋治好咗黑夜，卻不小心殺死咗營火。`,
+    threadsUrl: '',  // ← 補返 Threads URL 過嚟我加入
+  },
   {
     id: 'thread-2026-06-08-li',
     date: '2026-06-08',
