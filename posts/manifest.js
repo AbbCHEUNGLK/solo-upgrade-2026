@@ -357,7 +357,7 @@ window.THREAD_POSTS = [
 人類可能沒有自由的「發起權」（Free Will），但擁有自由的「否決權」（Free Won't）。
 
 你永遠有其他選擇同可能。`,
-    threadsUrl: '',  // ← 補返 Threads URL 過嚟我加入
+    threadsUrl: 'https://www.threads.com/@_aura.laia_/post/DZeqZ6Vjg_u?xmt=AQG0WABmIhcn-Yg6XrBZuzYExzh-ENfbVClyznWivNHw-Q',
   },
   {
     id: 'thread-2026-06-08-firelight',
