@@ -181,6 +181,24 @@ window.PUBLISHED_POSTS = [
 // 同 insight，commit + push 就喺 calendar 日詳細 panel 入面 show。
 
 window.JOURNAL = {
+  '2026-06-12': `## ✅ AI Fluency: Framework & Foundations 完成
+
+Anthropic Academy 嘅第 4 個 course done。COURSES tracker 由 3/3 → 4/4。順便將舊三個 \`sub\` 由 "Anthropic Skilljar" 統一改成 "Anthropic Academy"（newer brand）。
+
+## Daily task 微調：Self Small Talk → Anthropic Academy 微學習
+
+審視今日嘅 5 個 daily task，發現 **Self Small Talk 錄音** 嘅 marginal value 已經低咗——其他 3 個 communication task（AI Storytelling、Article → 啟發總結、Shadowing + Re-tell）已 cover 晒 read / speak / listen / reflect 嘅 cycle。
+
+替換成 **Anthropic Academy 微學習 15 min**：每日 consume 15 min Anthropic Academy 或其他 cert course 內容（影片 / docs / interactive demo），積少成多 keeps you ahead of frontier，避免一次過 binge consume 帶嚟嘅 burnout。
+
+> 注意：歷史 \`tasks_done\` records 入面 task index 1 嘅意義從今日起由「Self Small Talk」變成「Anthropic Academy 微學習」——舊 records 仍然 valid 反映你嗰日做咗 task #1，只係 label 改咗。
+
+## 下一步可以諗
+
+- 中醫 5 行 篇 draft → polish → publish
+- 將 long-term goals / TASKS 都 migrate 去 file-based pattern（避免下次再有 task index drift 嘅 ambiguity）
+- 配合「微學習」task，每日 15 min 食啲新 Anthropic content`,
+
   '2026-06-08': `## 今日 build 咗
 
 - 認證 page 重新 design：3 個 section 統一用 accordion card pattern

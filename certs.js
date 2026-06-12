@@ -11,9 +11,10 @@ const CERTS = [
 ];
 
 const COURSES = [
-  { id:'c101',  logo:'🎓', name:'Claude 101',       sub:'Anthropic Skilljar', base:100 },
-  { id:'cc101', logo:'⌨️', name:'Claude Code 101',  sub:'Anthropic Skilljar', base:100 },
-  { id:'ccw',   logo:'🤝', name:'Claude Cowork',    sub:'Anthropic Skilljar', base:100 },
+  { id:'c101',  logo:'🎓', name:'Claude 101',                            sub:'Anthropic Academy', base:100 },
+  { id:'cc101', logo:'⌨️', name:'Claude Code 101',                       sub:'Anthropic Academy', base:100 },
+  { id:'ccw',   logo:'🤝', name:'Claude Cowork',                         sub:'Anthropic Academy', base:100 },
+  { id:'aif',   logo:'🧠', name:'AI Fluency: Framework & Foundations',   sub:'Anthropic Academy', base:100 },
 ];
 
 const POSTS = [
