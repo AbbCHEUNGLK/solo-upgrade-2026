@@ -311,6 +311,22 @@ window.JOURNAL = {
 
 **Workflow 嘅 validation：** Thread = idea seed → Substack = polished long-form expansion。呢個 pipeline 完美 demonstrate 咗你嘅 architecture——short-form 試 angle，long-form 加 depth + citations。同 vanilla 雪糕嘅 formula 一致。
 
+## ✅ Building with Claude API 完成
+
+Anthropic Academy 嘅第 5 個 course done。COURSES tracker 由 4/4 → 5/5。Trajectory：
+
+> Claude 101 → Claude Code 101 → Claude Cowork → AI Fluency → Building with Claude API
+
+由 user-facing → IDE 開發 → file-system autonomy → 認知 framework → 直接 API call，呢條 path 等於由「點用」進化到「點 build」嘅 progression。
+
+## Thread #4 上線（Manifestation × Carl Sagan）
+
+> 「Manifestation 只是一個 framing——讓我們願意去 commit 一個看似不可能的想法。而那份 commitment，就是行動的起點。」
+
+引用 Carl Sagan 嘅 *"We are a way for the cosmos to know itself"*——將 cosmological probability 同 manifestation 嘅 commitment psychology 連埋。呢個 angle interesting 喺：唔係 New Age 嘅「信就會成真」，而係 secular reframe——manifestation 嘅本質係「夠膽 commit」嘅 mental scaffolding。
+
+呢條 thread 嘅 input → output 同樣完成今日「**Article → 啟發總結**」task。
+
 ## 中醫 5 行 篇 status
 
 之前我哋一齊 draft 嘅 ~4,800 字 中醫五行 / body as ecosystem 篇仲未 ship。如果你想 next session 拎返出嚟 polish + publish，個 draft 仲 hold 喺 manifest.js comments / 我哋之前對話入面，隨時可以 lift 出嚟。
@@ -458,6 +474,23 @@ Re-tell session Q2 我答得 muddled，Claude 補返一個 sharp 版本：
 // 由我喺 Cowork chat 直接 maintain
 
 window.THREAD_POSTS = [
+  {
+    id: 'thread-2026-06-13-manifestation',
+    date: '2026-06-13',
+    content: `為什麼我信 Manifestation？
+
+因為當我想到，這個宇宙連「生命」都可以從無到有創造出來，在這個種機率制度下，有什麼是不可能的呢？
+
+宇宙本身就係一個巨大嘅「創造系統」。
+
+> We are a way for the cosmos to know itself.
+> —— Carl Sagan
+
+Manifestation 只是一個 framing——讓我們願意去 commit 一個看似不可能的想法。
+
+而那份 commitment，就是行動的起點。`,
+    threadsUrl: 'https://www.threads.com/@_aura.laia_/post/DZkI71ajjNZ?xmt=AQG0bVzsCwyM5F9KoWJO7vJ_bwzIMRsjyclpcyDtRBBxMw',
+  },
   {
     id: 'thread-2026-06-12-freewont',
     date: '2026-06-12',
