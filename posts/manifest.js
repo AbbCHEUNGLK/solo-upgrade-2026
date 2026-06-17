@@ -301,6 +301,44 @@ Wiessner 說過一句很美的話：
 // 同 insight，commit + push 就喺 calendar 日詳細 panel 入面 show。
 
 window.JOURNAL = {
+  '2026-06-14': `## 🎁 Mabelle event 嘅 unexpected delight
+
+本身諗住去拎個水樽 only ——結果個姐姐超勁咁幫我開返本身已經幾乎埋左口嘅耳窿。Shocked。我仲打算放棄耳機哩樣嘢，返到屋企又帶返 haha。
+
+仲比我試到一對心心耳環⋯⋯想要。下次再有 event 再去 lam 禮物個時先——可能又係一份生日禮物。
+
+Btw 個水壺比想像中靚，仲要係紫色～開心開心。
+
+## 💡 Threading back: Manifestation × Carl Sagan
+
+> 為什麼我信 Manifestation？因為當我想到，這個宇宙連「生命」都可以從無到有創造出來，在這個種機率制度下，有什麼是不可能的呢？
+
+琴日 6/13 寫低嘅 thread。今日重新 surface 係因為呢個 framing 啱啱配合 Mabelle 嘅 unexpected delight——本身去拎水壺，唔知道嘅 universe 已經喺度幫你開耳窿、預備心心耳環。
+
+呢個 thread 同 Free Won't（6/12）形成完美 pairing：
+- **Free Won't** = 拒絕慣性嘅 veto power
+- **Manifestation** = commit 看似不可能嘅 thing 嘅 framing
+
+一個收一個放，組合埋係完整嘅 agency。
+
+## 🌭 食物驚為天人：美版 yellow mustard
+
+嘩嘩嘩，今日個多士加咗 yellow mustard——驚為天人。好夾。我啱我口味。
+
+琴日仲係咁睇食譜睇下點樣消耗咁大支醬，但估！唔！到！美版 yellow mustard 咁好食。之前食 Dijon mustard 真係太辛辣，點整都唔夾。但今次係用嚟搽包、點餃子、配肉——全部 perfect match。同個蕃茄辣湯都好夾。
+
+正呀正。
+
+## 今日 daily tasks ✓
+
+- ✓ 朝早：最佳自我想像 + Stoic 準備
+- ✓ Anthropic Academy 微學習
+- ✓ AI Storytelling 練習
+- ✓ Article → 啟發總結（呢條 Manifestation thread 算埋）
+- ⬜ Shadowing + Re-tell（仲未做）
+
+4/5 = 80%。Strong day.`,
+
   '2026-06-13': `## ✅ Substack 第 2 篇 published
 
 **標題：** 我們治好了黑夜，卻不小心殺死了營火：為什麼我們丟失了深夜的真心話？
