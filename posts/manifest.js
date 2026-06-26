@@ -353,7 +353,15 @@ Btw 個水壺比想像中靚，仲要係紫色～開心開心。
 - **XML tags**——學到 tag-as-labeled-envelope 嘅 concept，並且 spot 到自己之前 prompt 入面邊度 wrap 咗會 cleaner（例如 paste long content + ask 嘅 turn）
 - **Tool use**——意識到我哋整段 conversation 我已經 heavily 用緊 tools（Read / Edit / Bash / WebFetch / TaskCreate 等）；future build 階段 spec tool description / boundaries / failure handling 係 PM 嘅 turf
 
-呢個 course 嘅 mode 同前 4 個唔同——前 4 個係 absorb concept，呢個係**邊學邊同我 apply 落 real conversation**（譬如即時 self-grade vanilla vs firelight、用 author preference vs audience reaction axis 拆解 reactions divergence）。Learning loop 嘅 density 大幅高過 passive consumption。`,
+呢個 course 嘅 mode 同前 4 個唔同——前 4 個係 absorb concept，呢個係**邊學邊同我 apply 落 real conversation**（譬如即時 self-grade vanilla vs firelight、用 author preference vs audience reaction axis 拆解 reactions divergence）。Learning loop 嘅 density 大幅高過 passive consumption。
+
+## 🪙 同步進行：Fintech Innovations (Coursera · U Michigan)
+
+Cross-domain expansion。Payment / banking knowledge 加埋 AI fluency 嘅 PM 喺 fintech AI products 嘅 sector 越來越 valuable，但兩邊 literacy 同時有嘅 PM 唔多。Started 喺 ~25%，加入 CERTS tracker（id: \`fin\`）。
+
+Trajectory 浮現：
+
+> AI fluency (5/5 Anthropic Academy) + Fintech domain knowledge (Coursera) + Communication craft (Substack + Thread cadence) = 一個 distinctive PM positioning 嘅 3-pillar 組合`,
 
   '2026-06-13': `## ✅ Substack 第 2 篇 published
 

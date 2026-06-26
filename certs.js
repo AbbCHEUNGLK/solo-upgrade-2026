@@ -8,6 +8,7 @@ const CERTS = [
   { id:'gai', logo:'☁️', name:'Google Generative AI',     sub:'Google Cloud Skills Boost',           base:0  },
   { id:'msa', logo:'🪟', name:'Microsoft AI Fundamentals',sub:'AI-900 · Microsoft Learn',            base:0  },
   { id:'gpm', logo:'📋', name:'Google Project Management',sub:'Coursera · Professional Certificate', base:0  },
+  { id:'fin', logo:'💳', name:'Fintech Innovations',       sub:'Coursera · University of Michigan',  base:25 },
 ];
 
 const COURSES = [
