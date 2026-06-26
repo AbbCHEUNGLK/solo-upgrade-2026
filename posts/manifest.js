@@ -337,7 +337,23 @@ Btw 個水壺比想像中靚，仲要係紫色～開心開心。
 - ✓ Article → 啟發總結（呢條 Manifestation thread 算埋）
 - ⬜ Shadowing + Re-tell（仲未做）
 
-4/5 = 80%。Strong day.`,
+4/5 = 80%。Strong day.
+
+## ✅ Building with the Claude API 完成 = 5/5 Anthropic Academy
+
+今日完成最後一個 Anthropic Academy course。完整 progression：
+
+> Claude 101 → Code 101 → Cowork → AI Fluency → Building with Claude API
+
+呢套 cover 晒 4 個 level：**user → power user → autonomous-agent user → meta-fluent → builder**。對 PM 嘅 implication：可以直接同 eng 傾 API spec / eval threshold / tool design，唔需要 translator。
+
+**今日學嘅核心 concepts 同我哋實時應用：**
+
+- **Prompt evaluation workflow**——之後我哋傾咗 dev / PM ownership split + 3-tier framework（production / repeated workflow / one-off chat），confirm 我哋 chat 屬 Tier 3 唔需要 dataset+grader，但 eval-first thinking 仍 transferable
+- **XML tags**——學到 tag-as-labeled-envelope 嘅 concept，並且 spot 到自己之前 prompt 入面邊度 wrap 咗會 cleaner（例如 paste long content + ask 嘅 turn）
+- **Tool use**——意識到我哋整段 conversation 我已經 heavily 用緊 tools（Read / Edit / Bash / WebFetch / TaskCreate 等）；future build 階段 spec tool description / boundaries / failure handling 係 PM 嘅 turf
+
+呢個 course 嘅 mode 同前 4 個唔同——前 4 個係 absorb concept，呢個係**邊學邊同我 apply 落 real conversation**（譬如即時 self-grade vanilla vs firelight、用 author preference vs audience reaction axis 拆解 reactions divergence）。Learning loop 嘅 density 大幅高過 passive consumption。`,
 
   '2026-06-13': `## ✅ Substack 第 2 篇 published
 
