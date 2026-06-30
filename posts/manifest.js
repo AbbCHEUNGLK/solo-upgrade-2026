@@ -355,13 +355,35 @@ Btw 個水壺比想像中靚，仲要係紫色～開心開心。
 
 呢個 course 嘅 mode 同前 4 個唔同——前 4 個係 absorb concept，呢個係**邊學邊同我 apply 落 real conversation**（譬如即時 self-grade vanilla vs firelight、用 author preference vs audience reaction axis 拆解 reactions divergence）。Learning loop 嘅 density 大幅高過 passive consumption。
 
-## 🪙 同步進行：Fintech Innovations (Coursera · U Michigan)
+## 🪙 同步進行：Fintech Innovations Specialization (Coursera · U Michigan)
 
-Cross-domain expansion。Payment / banking knowledge 加埋 AI fluency 嘅 PM 喺 fintech AI products 嘅 sector 越來越 valuable，但兩邊 literacy 同時有嘅 PM 唔多。Started 喺 ~25%，加入 CERTS tracker（id: \`fin\`）。
+Cross-domain expansion。4-course Specialization：
 
-Trajectory 浮現：
+1. The Future of Payment Technologies（in progress, 26%）
+2. Blockchain and Cryptocurrency Explained（next）
+3. Raising Capital: Credit Tech, Coin Offerings, Crowdfunding
+4. Innovations in Investment Technology: AI
 
-> AI fluency (5/5 Anthropic Academy) + Fintech domain knowledge (Coursera) + Communication craft (Substack + Thread cadence) = 一個 distinctive PM positioning 嘅 3-pillar 組合`,
+對應 Binance current 嘅 cross-border + Web3 payment work，aligned with confirmed next-role direction（cross-border payment & merchant side payment systems）。Coursera 全 spec 進度約 7%（course 1 of 4 at 26%）。
+
+## 📋 Strategic clarification（CV share 之後嘅 calibration）
+
+CV reveal 之後我重新 anchor 對你嘅 understanding：
+
+- **Career arc spine：物理 flow → 數碼 flow → 代幣化 flow → payment flow**，spine 唔係「PM in tech」係「PM specializing in flow systems crossing boundaries」
+- **Next role 方向 confirmed**：繼續 cross-border payment + merchant side payment systems，所以係 deepening 嘅 trajectory，唔係 pivot
+- **Substack content strategy 係 intentional craft choice**：cognitive sanctuary + consulting-grade framework on life phenomena，唔係 work-related thought leadership。呢個係 **senior PM-level positioning move**——partner-style「strategic versatility across domain」嘅 signal，比 domain-specialist blogging 更 valuable for senior trajectory。我之前 framing 為「gap」嘅 advice 錯咗，retract。
+- **Self-Upgrade 2026 project**：personal upgrade tracker + PM-AI collaboration workflow portfolio artifact——alongside Binance day job 嘅 self-developed PM tooling demo
+
+## Daily task #1 擴闊 scope
+
+「Anthropic Academy 微學習」→ **「專業課程 微學習」**，cover Anthropic Academy + Coursera Fintech Specialization 兩條 track。同一個 daily commitment 但兩個 source 都 valid。
+
+## 下一步可以諗
+
+- 中醫 5 行 篇 draft → polish → publish（pending）
+- 將 long-term goals 由 abstract 變 milestone-aligned（2026 March Binance transition 嘅 4-month planning horizon）
+- 配合「微學習」task，每日 15 min 兩個 track alternate consume`,
 
   '2026-06-13': `## ✅ Substack 第 2 篇 published
 

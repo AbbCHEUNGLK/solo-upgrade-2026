@@ -4,8 +4,8 @@
 const TASKS = [
   { id: 0, name: 'AI Storytelling 練習',             time: '15–20 min', tag: '溝通', tagClass: 'tag-comm',
     detail: '<strong>Prompt：</strong>「我想練習 Storytelling。你扮演好奇嘅朋友，我講 2–3 分鐘故事，你問 2 條追問。」' },
-  { id: 1, name: 'Anthropic Academy 微學習',         time: '15 min',    tag: '學習', tagClass: 'tag-comm',
-    detail: '每日 15 min consume Anthropic Academy 或其他 cert course 內容（影片、docs、interactive demo）。<br><strong>策略：</strong>積少成多 keeps you ahead of frontier，避免 binge consume 嘅 burnout。<br><strong>今日選擇：</strong>揀一條 5 min 嘅 micro-lesson 開始，剩低時間 reflect 一條 takeaway。' },
+  { id: 1, name: '專業課程 微學習',                   time: '15 min',    tag: '學習', tagClass: 'tag-comm',
+    detail: '每日 15 min consume 進行中嘅課程內容（影片、docs、interactive demo）。<br><strong>Current tracks：</strong>(a) Anthropic Academy AI Capabilities & 後續 courses · (b) Coursera Fintech Innovations specialization（Payment Tech → Blockchain → Capital → InvestTech AI）。<br><strong>策略：</strong>積少成多 keeps you ahead of frontier；今日選擇就揀其中一條 micro-lesson 開始，剩低時間 reflect 一條 takeaway。' },
   { id: 2, name: 'Article → 啟發總結',               time: '10 min',    tag: '溝通', tagClass: 'tag-comm',
     detail: '讀一篇領域外文章，一句話總結 + 「這篇文章給我的啟發是……」' },
   { id: 3, name: 'Shadowing + Re-tell',              time: '15 min',    tag: '溝通', tagClass: 'tag-comm',
