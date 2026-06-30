@@ -17,6 +17,7 @@ const COURSES = [
   { id:'ccw',   logo:'🤝', name:'Claude Cowork',                         sub:'Anthropic Academy', base:100 },
   { id:'aif',   logo:'🧠', name:'AI Fluency: Framework & Foundations',   sub:'Anthropic Academy', base:100 },
   { id:'bwca',  logo:'🔧', name:'Building with Claude API',              sub:'Anthropic Academy', base:100 },
+  { id:'aicl',  logo:'🤖', name:'AI Capabilities & Limitations',         sub:'Anthropic Academy', base:10  },
 ];
 
 const POSTS = [
