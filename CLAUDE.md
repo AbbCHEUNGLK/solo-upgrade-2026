@@ -2,6 +2,10 @@
 
 > 呢個 file 係我同 Claude 合作嘅 working agreement。每次開新 chat，叫 Claude `read CLAUDE.md` 即可 sync 返成套 protocol。
 
+## Companion Context File
+
+**Also read `context/user_profile.md`** — canonical user profile (identity, mission, values, AI collaboration preferences, active learning tracks, anti-patterns). New sessions should treat that document as the operating protocol frame; this CLAUDE.md is the project-workflow rules layered on top.
+
 ---
 
 ## Project Context

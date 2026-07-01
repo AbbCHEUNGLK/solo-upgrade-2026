@@ -379,11 +379,27 @@ CV reveal 之後我重新 anchor 對你嘅 understanding：
 
 「Anthropic Academy 微學習」→ **「專業課程 微學習」**，cover Anthropic Academy + Coursera Fintech Specialization 兩條 track。同一個 daily commitment 但兩個 source 都 valid。
 
+## 🎯 Next role confirmed: Lalamove, Senior Payment Product Manager, Regional scope
+
+**Career arc synthesis：** BBA International Shipping and Transport Logistics（2014-2018）→ DeFi（Cronos 2022）→ Mobile payment（AlipayHK 2024）→ Cross-border Web3 payment（Binance 2025）→ **Lalamove 2026：Logistics ∩ Payment ∩ Regional**。8 年 trajectory 嘅 convergent destination——原始 logistics 教育 + Web3 / Fintech payment specialty 第一次 collide 喺同一個 role 入面。
+
+**Seniority jump confirmed**：PM → Senior PM。Regional scope 對齊 cross-border experience。
+
+## 4 個月 prep horizon（Mar 2026 → 開始 Lalamove）
+
+四條 high-leverage prep axes：
+
+1. **Regional payment landscape literacy** — Lalamove 嘅核心 markets（HK / 中國 / SEA / LatAm）嘅 payment rails、wallets、regulators。Coursera Course 1（Payment Technologies）直接 cover 一部分
+2. **Marketplace / gig economy 嘅 payment patterns** — driver payouts（real-time、cross-border、FX）、customer 多 payment method、merchant settlement、reconciliation。呢個 sub-domain Coursera 唔深，可能要靠 case study / talking to people
+3. **Senior PM leadership signals** — Senior level 開始有 team leadership / stakeholder 高層 / strategic planning over longer horizons 嘅 expectations
+4. **Lalamove product immersion** — 用佢個 app（HK 用戶）、讀公開 job description / earnings call / press release、可能 LinkedIn message 現職員工
+
 ## 下一步可以諗
 
 - 中醫 5 行 篇 draft → polish → publish（pending）
-- 將 long-term goals 由 abstract 變 milestone-aligned（2026 March Binance transition 嘅 4-month planning horizon）
-- 配合「微學習」task，每日 15 min 兩個 track alternate consume`,
+- 將 home.js 長期目標由 abstract 改為 Lalamove-aligned concrete milestone（要我做？）
+- Coursera Course 1 prioritize 喺 May 1 之前完成（before Lalamove start 的 baseline）
+- 中性 Substack 寫 1 篇 cross-flow 主題嘅 essay（McKinsey/BCG framework on flow systems）——既係 intellectual sandbox，又係 implicit positioning signal`,
 
   '2026-06-13': `## ✅ Substack 第 2 篇 published
 
