@@ -20,6 +20,7 @@ const COURSES = [
   { id:'aicl',  logo:'🤖', name:'AI Capabilities & Limitations',         sub:'Anthropic Academy', base:10  },
   { id:'aisb',  logo:'🏪', name:'AI Fluency for Small Businesses',       sub:'Anthropic Academy', base:100 },
   { id:'ias',   logo:'🛠️', name:'Introduction to Agent Skills',           sub:'Anthropic Academy', base:100 },
+  { id:'isa',   logo:'👥', name:'Introduction to Subagents',              sub:'Anthropic Academy', base:100 },
 ];
 
 const POSTS = [
