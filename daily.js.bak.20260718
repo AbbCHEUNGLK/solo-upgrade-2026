@@ -1,10 +1,8 @@
 // daily.js — 每日任務 · Version 2026.07 (Lalamove-onboarding phase)
-// Wish Jar Concern 2 (2026-07-18): TASKS restructured to mission schema.
-// Missions live in Storage.getMissions(); DEFAULT_MISSIONS is the seed if empty.
-// Daily tab renders showInDaily=true (5 missions). Opportunity missions
-// (Substack, Share insight) live in Storage 但只喺 Wish Jar tab 顯示（Concern 3）。
-// tasks_done schema 保留 backward-compat；完成 = tasks_done write + jar_state earn 同步。
-// Strike + weekly cap enforcement 押後 Concern 4。
+// 改任務清單只需動 TASKS 陣列
+// 每個 task 有 lens 欄，keyed by weekday (sun-sat)，係「今日 focus」rotation
+// Historical tasks_done indices refer to task at that id AT THE TIME of check;
+// Version 2026.07 shipped 2026-07-10 (Fri) — 保留 id 0-4 索引，語意重寫。
 
 const WEEKDAYS = ['sun','mon','tue','wed','thu','fri','sat'];
 
@@ -12,19 +10,13 @@ function _todayKey() {
   return WEEKDAYS[new Date().getDay()];
 }
 
-// ─── Default mission seed（首次 load 時填入 Storage）─────
-const DEFAULT_MISSIONS = [
+const TASKS = [
   {
     id: 0,
     name: '朝早三步儀式',
-    category: '身心',
-    tagClass: 'tag-mind',
     time: '8 min',
-    timeMin: 8,
-    reward: 10,
-    cadence: 'daily',
-    isOpportunity: false,
-    showInDaily: true,
+    tag: '身心',
+    tagClass: 'tag-mind',
     detail: '<strong>三步：</strong>①自我最佳想像 2 min → ②言靈抄寫 / 念誦 → ③今日戰略 scenario prep（預想今日可能遇到嘅混沌 + 你嘅 response）',
     lens: {
       sun: '<strong>Weekly reflection</strong> — 上週有咩 compound 咗？下週想帶邊個 momentum 入去？',
@@ -39,14 +31,9 @@ const DEFAULT_MISSIONS = [
   {
     id: 1,
     name: '專業課程 微學習',
-    category: '學習',
-    tagClass: 'tag-comm',
     time: '15 min',
-    timeMin: 15,
-    reward: 20,
-    cadence: 'daily',
-    isOpportunity: false,
-    showInDaily: true,
+    tag: '學習',
+    tagClass: 'tag-comm',
     detail: '<strong>Current tracks：</strong>(a) Coursera Fintech Innovations Specialization · (b) Anthropic AI Capabilities & Limitations 收尾 · (c) 之後 Adyen Academy。<br><strong>策略：</strong>15 min consume + 1 條 takeaway，唔強求進度。',
     lens: {
       sun: '<strong>Weekly digest</strong> — 上週學過嘅嘢，揀 1 件試教俾非行內朋友聽',
@@ -61,14 +48,9 @@ const DEFAULT_MISSIONS = [
   {
     id: 2,
     name: 'PM Window Shopping',
-    category: '學習',
-    tagClass: 'tag-comm',
     time: '10–15 min',
-    timeMin: 12,
-    reward: 10,
-    cadence: 'daily',
-    isOpportunity: false,
-    showInDaily: true,
+    tag: '學習',
+    tagClass: 'tag-comm',
     detail: '每日 1 個 Fintech / Payment app，用 PM lens 拆解：「如果我係呢個 product PM，資源擺喺邊？呢個 feature 划算嗎？」<br><strong>Purpose：</strong>將「格價式」defense mechanism → commercial intuition 訓練。',
     lens: {
       sun: '<strong>Retro</strong> — 本週睇過嘅 5 個 app，最 stick 得嘅嗰個嘅原因？',
@@ -83,14 +65,9 @@ const DEFAULT_MISSIONS = [
   {
     id: 3,
     name: 'AI Storytelling 練習',
-    category: '溝通',
-    tagClass: 'tag-comm',
     time: '15–20 min',
-    timeMin: 18,
-    reward: 10,
-    cadence: 'daily',
-    isOpportunity: false,
-    showInDaily: true,
+    tag: '溝通',
+    tagClass: 'tag-comm',
     detail: '<strong>Prompt：</strong>「我想練習 Storytelling。你扮演好奇嘅朋友，我講 2–3 分鐘故事，你問 2 條追問。」<br><strong>Focus：</strong>用今日 lens 揀 storytelling subject，唔好齋抽象 topic。',
     lens: {
       sun: '<strong>本週 win storytelling</strong> — 揀本週一個 work moment，練 3 分鐘',
@@ -105,14 +82,9 @@ const DEFAULT_MISSIONS = [
   {
     id: 4,
     name: '一期一會筆記',
-    category: '溝通',
-    tagClass: 'tag-comm',
     time: '10 min',
-    timeMin: 10,
-    reward: 10,
-    cadence: 'daily',
-    isOpportunity: false,
-    showInDaily: true,
+    tag: '溝通',
+    tagClass: 'tag-comm',
     detail: '收工後 MUJI 清風房，2–3 lines 觀察筆記。<br><strong>Purpose：</strong>累積成 Stakeholder Map + Substack seed pool。<br><strong>Format：</strong>紙筆或 Notes app，一次一 moment，唔要寫成 article。',
     lens: {
       sun: '<strong>Stakeholder Map 補</strong> — 邊個 stakeholder profile 仲空？補一補',
@@ -124,109 +96,15 @@ const DEFAULT_MISSIONS = [
       sat: '<strong>自由觀察</strong> — 咩都可以',
     }
   },
-  // ─── Opportunity missions（只喺 Wish Jar tab 顯示）─────
-  {
-    id: 5,
-    name: 'Post 1 Substack article',
-    category: '溝通',
-    tagClass: 'tag-comm',
-    time: '~90 min',
-    timeMin: 90,
-    reward: 100,
-    cadence: 'daily',
-    isOpportunity: true,
-    showInDaily: false,
-    detail: '一次 Substack 發文 · 5 段 BCG-style（Hook → Framework → Science → Counter-intuitive → Closing）· 目標每週 1 次',
-    lens: {}
-  },
-  {
-    id: 6,
-    name: 'Share insight to 1 person',
-    category: '溝通',
-    tagClass: 'tag-comm',
-    time: '30+ min',
-    timeMin: 30,
-    reward: 300,
-    cadence: 'daily',
-    isOpportunity: true,
-    showInDaily: false,
-    detail: 'In-depth prof discussion（同 same-level PM / senior 分享 payment / fintech insight）· 唔算 casual mention',
-    lens: {}
-  },
 ];
 
-// ─── Seed missions on first render (idempotent) ─────────
-let _seedChecked = false;
-async function _seedMissionsIfEmpty() {
-  if (_seedChecked) return;
-  _seedChecked = true;
-  if (Storage.getMissions().length === 0) {
-    await Storage.setMissions(DEFAULT_MISSIONS);
-  }
+function _lensFor(task) {
+  return task.lens?.[_todayKey()] || '';
 }
 
-// ─── Earn / un-earn helpers（minimal · Concern 4 will formalize strike + cap）
-function _weekStart(dateStr) {
-  // Sunday as week start (Apple Cal align)
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() - d.getDay());
-  return d.toISOString().slice(0, 10);
-}
-
-async function _earnFromMission(mission) {
-  const state = Storage.getJarState() || {};
-  const today = new Date().toISOString().slice(0, 10);
-  const currentWeekStart = _weekStart(today);
-
-  // Weekly rollover: reset weeklyEarned 如果過咗一個 week
-  if (state.weekStartDate !== currentWeekStart) {
-    state.weekStartDate = currentWeekStart;
-    state.weeklyEarned = 0;
-  }
-
-  const amount = mission.reward || 0;
-  state.totalEarned = (state.totalEarned || 0) + amount;
-  state.weeklyEarned = (state.weeklyEarned || 0) + amount;
-  state.earnLog = state.earnLog || [];
-  state.earnLog.push({
-    missionId: mission.id,
-    amount,
-    timestamp: new Date().toISOString(),
-  });
-
-  await Storage.setJarState(state);
-}
-
-async function _unearnFromMission(mission) {
-  const state = Storage.getJarState() || {};
-  const amount = mission.reward || 0;
-  state.totalEarned = Math.max(0, (state.totalEarned || 0) - amount);
-  state.weeklyEarned = Math.max(0, (state.weeklyEarned || 0) - amount);
-
-  // Remove most recent earnLog entry for this mission today
-  const today = new Date().toISOString().slice(0, 10);
-  const log = state.earnLog || [];
-  for (let i = log.length - 1; i >= 0; i--) {
-    if (log[i].missionId === mission.id && log[i].timestamp.slice(0, 10) === today) {
-      log.splice(i, 1);
-      break;
-    }
-  }
-  state.earnLog = log;
-
-  await Storage.setJarState(state);
-}
-
-function _lensFor(mission) {
-  return mission.lens?.[_todayKey()] || '';
-}
-
-async function renderDaily() {
-  await _seedMissionsIfEmpty();
-  const missions = Storage.getMissions().filter(m => m.showInDaily);
+function renderDaily() {
   const now = new Date();
   const tasksDone = Storage.getTasksDone();
-
   document.getElementById('page-area').innerHTML = `
 <style>
   .task-lens {
@@ -245,24 +123,6 @@ async function renderDaily() {
   .task-item.done .task-lens strong {
     color: var(--text3);
   }
-  .task-reward {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--orange);
-    background: rgba(229, 124, 58, 0.08);
-    border: 1px dashed var(--orange);
-    padding: 1px 8px;
-    border-radius: 10px;
-    margin-left: 8px;
-    vertical-align: middle;
-    font-family: -apple-system, 'Inter', sans-serif;
-  }
-  .task-item.done .task-reward {
-    color: var(--text3);
-    border-color: var(--text3);
-    background: transparent;
-  }
 </style>
 <div class="page-inner">
   <div class="page-title-row">
@@ -277,27 +137,27 @@ async function renderDaily() {
   </div>
 
   <div class="task-list">
-    ${missions.map((m, i) => {
-      const lens = _lensFor(m);
+    ${TASKS.map((t, i) => {
+      const lens = _lensFor(t);
       return `
-    <div class="task-item${tasksDone.includes(m.id) ? ' done' : ''}" id="ti-${m.id}">
-      <div class="task-check" onclick="toggleTask(${m.id}, event)">
+    <div class="task-item${tasksDone.includes(t.id) ? ' done' : ''}" id="ti-${t.id}">
+      <div class="task-check" onclick="toggleTask(${t.id}, event)">
         <svg class="task-check-inner" width="9" height="7" viewBox="0 0 9 7" fill="none">
           <path d="M1 3.5l2.3 2.3L8 1" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div class="task-body" onclick="expandTask(${m.id})">
-        <span class="task-name">${m.name}<span class="task-reward">+$${m.reward}</span></span>
+      <div class="task-body" onclick="expandTask(${t.id})">
+        <span class="task-name">${t.name}</span>
         ${lens ? `<div class="task-lens">今日 focus: ${lens}</div>` : ''}
         <div class="task-meta">
-          <span class="task-time">⏱ ${m.time}</span>
-          <span class="task-tag ${m.tagClass}">${m.category}</span>
+          <span class="task-time">⏱ ${t.time}</span>
+          <span class="task-tag ${t.tagClass}">${t.tag}</span>
         </div>
       </div>
-      <span class="task-expand-btn" onclick="expandTask(${m.id})">···</span>
+      <span class="task-expand-btn" onclick="expandTask(${t.id})">···</span>
     </div>
-    <div class="task-detail" id="td-${m.id}">
-      <div class="task-detail-inner">${m.detail}</div>
+    <div class="task-detail" id="td-${t.id}">
+      <div class="task-detail-inner">${t.detail}</div>
     </div>
     ${i === 0 ? '<hr class="divider">' : ''}`;
     }).join('')}
@@ -305,36 +165,16 @@ async function renderDaily() {
 </div>`;
 }
 
-async function toggleTask(id, e) {
+function toggleTask(id, e) {
   e.stopPropagation();
-  const mission = Storage.getMissions().find(m => m.id === id);
-  if (!mission) {
-    console.warn('toggleTask: mission not found for id', id);
-    return;
-  }
-
   const tasksDone = Storage.getTasksDone();
   const idx = tasksDone.indexOf(id);
-  const wasComplete = idx >= 0;
-
-  if (wasComplete) {
-    tasksDone.splice(idx, 1);
-    await Storage.setTasksDone(tasksDone);
-    await _unearnFromMission(mission);
-  } else {
-    tasksDone.push(id);
-    await Storage.setTasksDone(tasksDone);
-    await _earnFromMission(mission);
-  }
-
-  document.getElementById('ti-' + id)?.classList.toggle('done', !wasComplete);
+  idx >= 0 ? tasksDone.splice(idx, 1) : tasksDone.push(id);
+  Storage.setTasksDone(tasksDone);
+  document.getElementById('ti-' + id)?.classList.toggle('done', tasksDone.includes(id));
   updateTopProgress();
-  const dp = document.getElementById('d-pct');
-  const ds = document.getElementById('d-sub');
-  if (dp) {
-    dp.textContent = pct() + '%';
-    ds.textContent = tasksDone.length + ' / ' + NTASKS + ' 完成';
-  }
+  const dp = document.getElementById('d-pct'); const ds = document.getElementById('d-sub');
+  if (dp) { dp.textContent = pct() + '%'; ds.textContent = tasksDone.length + ' / ' + NTASKS + ' 完成'; }
 }
 
 function expandTask(id) {
