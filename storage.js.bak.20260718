@@ -15,11 +15,6 @@ let _cache = {
   posts_done: [],
   course_hl:  {},   // { c101: '整理咗嘅 markdown text', ... }
   posts:      [],   // Substack posts archive: [{ id, status, title, date, body, substackUrl }, ...]
-
-  // ─── Wish Jar v0.1 (2026-07-18) ───────────
-  missions:   [],   // [{ id, name, category, timeMin, reward, cadence, lastEarnedAt, streakDays, isOpportunity, showInDaily, lens? }]
-  wishes:     [],   // [{ id, name, price, emoji, status: 'ongoing'|'paused'|'completed', createdAt, completedAt?, savedAmount }]
-  jar_state:  {},   // { currentWishId, totalEarned, weeklyEarned, weekStartDate, weeklyCap, earnLog: [{missionId, amount, timestamp}] }
 };
 
 // ─── Supabase fetch helper ──────────────────────
@@ -61,9 +56,6 @@ const Storage = {
         _cache.posts_done = r.posts_done || [];
         _cache.course_hl  = r.course_hl  || {};
         _cache.posts      = r.posts      || [];
-        _cache.missions   = r.missions   || [];
-        _cache.wishes     = r.wishes     || [];
-        _cache.jar_state  = r.jar_state  || {};
       }
     } catch (e) {
       console.warn('Supabase load failed, using local cache:', e);
@@ -80,9 +72,6 @@ const Storage = {
         posts_done: _cache.posts_done,
         course_hl:  _cache.course_hl,
         posts:      _cache.posts,
-        missions:   _cache.missions,
-        wishes:     _cache.wishes,
-        jar_state:  _cache.jar_state,
         updated_at: new Date().toISOString(),
       });
     } catch (e) {
@@ -141,46 +130,6 @@ const Storage = {
   },
   async setPosts(v) {
     _cache.posts = v;
-    await this._save();
-  },
-
-  // ─── Wish Jar · Missions ───────────────────
-  getMissions() {
-    return _cache.missions || [];
-  },
-  async setMissions(v) {
-    _cache.missions = v;
-    await this._save();
-  },
-  // Immutable patch by id — returns updated array 唔 mutate 原本嘅
-  async updateMission(id, patch) {
-    const next = (_cache.missions || []).map(m => m.id === id ? { ...m, ...patch } : m);
-    _cache.missions = next;
-    await this._save();
-    return next;
-  },
-
-  // ─── Wish Jar · Wishes ─────────────────────
-  getWishes() {
-    return _cache.wishes || [];
-  },
-  async setWishes(v) {
-    _cache.wishes = v;
-    await this._save();
-  },
-  async updateWish(id, patch) {
-    const next = (_cache.wishes || []).map(w => w.id === id ? { ...w, ...patch } : w);
-    _cache.wishes = next;
-    await this._save();
-    return next;
-  },
-
-  // ─── Wish Jar · Jar state ──────────────────
-  getJarState() {
-    return _cache.jar_state || {};
-  },
-  async setJarState(v) {
-    _cache.jar_state = v;
     await this._save();
   },
 };
