@@ -4,6 +4,122 @@
 
 window.PUBLISHED_POSTS = [
   {
+    id: 'payment-marketplace-2026-07-19',
+    status: 'published',
+    title: '拆解平台級支付：當 Payment 從用戶介面，走向底層基礎建設',
+    date: '2026-07-19',
+    substackUrl: 'https://abbycheung1.substack.com/p/payment',
+    body: `*在 On-demand 平台（如跨境物流、外賣或出行配對）的生態裡，Payment（支付）團隊面對的從不是簡單的「購物車結賬」流程。*
+
+如果你問大部分人 Payment Team 是做什麼的？大概都會得到差不多的答案：
+
+**讓客人成功付款。**
+
+這個答案沒有錯。但只適用於一半的世界。
+
+如果你做的是一般電商（E-commerce），例如 Amazon，Payment 確實主要圍繞著 Checkout：支援更多付款方式、提升付款成功率、降低棄單率。但配對平台（Marketplace）是另一種遊戲。Uber、Grab、Lalamove、Upwork，甚至 Airbnb——它們不是單純賣東西，而是在兩個陌生人之間建立交易。這類平台是商戶（Merchant）與支付服務商（PSP）的混合體，特殊性在於資金是雙邊流動的：
+
+- **入金端 (Pay-in)：** 一邊向付款方（Payer）收錢，走的是收單網絡（Acquiring Rails）。
+- **出金端 (Pay-out)：** 另一邊要把服務提供者的收入打給收款方（Receiver），走的是出金網絡（Disbursement Rails）。
+
+對外，平台是 Merchant；對內，平台實際上運行著半個 Payment Company。這個角色在支付行業裡有正式的名字——**Payment Facilitator（PayFac）**：平台以自己的收單關係替旗下 sub-merchants 處理資金，並承擔相應的合規與風險責任¹。這兩條線路的成本結構、失敗模式與監管要求完全不同。
+
+所以 Payment Team 設計的，不再是一個 Checkout，而是一整套資金流（Money Flow）。這篇文章將以支付產品經理的視角，拆解這個「一進一出」的完整資金流，以及錢每經過一層時，我們真正需要關心的事。
+
+## 一筆交易，其實是一條河流
+
+    Payer
+      │ Pay-in（Acquiring Rails）
+      ▼
+   Platform
+      │ Pay-out（Disbursement Rails）
+      ▼
+   Receiver
+
+平台並不是一條透明的水管。每當資金流經平台，它都需要同時完成很多事情：驗證付款是否成功、扣除平台佣金、計算稅項、更新帳本、安排結算、決定何時向司機付款、確保整個流程符合監管要求。
+
+於是，一筆看似簡單的付款，開始變成一套大型的資金管理系統。Payment PM 每天思考的，很多時候是這類問題：
+
+- 應該讓司機即時提現，還是每天結算一次？
+- 平台需要先墊付資金嗎？
+- 不同國家的支付方式應該如何接入？
+- Wallet 值不值得建立？在合規上的代價是什麼？
+- 每單交易能不能再便宜 10 bps？
+
+Marketplace 的支付世界，開始從 UI，走向 Infrastructure。
+
+## Marketplace Payment 組成部分
+
+如果把這套複雜的基礎建設拆開，它大致可以由以下五個模組組成：
+
+### 1. Pay-in（入金端）── 如何收錢
+
+支援的渠道越多，意味著越能觸達不同的付款人。平台需要思考：支援哪些付款方式？信用卡？銀行轉帳？本地電子錢包？即時支付系統？
+
+在巴西，即時支付系統 Pix 已覆蓋 93% 的成年人口，每月交易量逼近 80 億筆²³；在菲律賓，GCash 擁有 9,400 萬用戶、佔電子錢包市場近九成——但同時，現金仍佔當地實體消費金額的四成以上⁴。換句話說，在東南亞或拉美，payer 慣用的可能不是卡，而是本地錢包甚至現金。
+
+### 2. Pay-out（出金端）── 如何派錢
+
+很多人第一次接觸 Marketplace 都會發現：收錢容易，派錢反而更困難。因為付款人付完錢就可以離開，但司機、物流商、創作者——他們每天都在等待收入。2025 年一項 gig driver 調查顯示，七成司機希望在賺到錢後 24 小時內收到款項⁵；Mastercard 的調查更發現，85% 的 gig workers 表示如果出糧更快，他們願意接更多工作⁶。
+
+Payout speed 不是 cost centre，而是 supply-side retention lever——派錢的速度，直接影響服務提供者留不留在你的平台上。
+
+平台需要思考：什麼時候付款？用哪條 Payment Rail？即時到帳還是 T+1？成本如何控制？
+
+### 3. Money Management（資金與流動性管理）── 錢的時間差
+
+平台收到錢，並不代表平台銀行戶口立即收到錢。很多時候 Card Settlement 是 T+1、甚至 T+2。但司機希望現在就收到。於是平台 Payment 開始變成一個 Liquidity Management 問題：要不要建立 Wallet？要不要墊付資金？Working Capital 是否足夠？
+
+### 4. Economics（交易經濟學）── 誰拿走了利潤
+
+「Payment」並不是免費。每一次收錢，每一次派錢，每一次跨境換匯，都有人收費。
+
+而 Marketplace 最大的特點，是佣金率（Take Rate，a16z 的 marketplace metrics 框架中的核心指標之一⁷）通常十分有限——定價受制於市場競爭，升不上去。
+
+支付成本對利潤的影響，遠比表面看起來大：一個 25% take rate 的平台，扣除 3% 支付成本後還剩 22 個點；但一個 6% take rate 的平台，同樣扣 3%，只剩 3 個點⁸——同一個支付成本，對低 take rate 平台可以是生死線。
+
+因此 Payment Team 每天都會思考怎樣把每筆交易成本再降低一點，即使每筆交易只節省幾十個 basis points（bps，即 0.01%），當交易量足夠大時，都可能直接轉化成數百萬美元的利潤。
+
+### 5. Compliance（合規與監管）
+
+最後，也是最容易被忽略的一部分。不同國家的 KYC（Know Your Customer）、AML（Anti-Money Laundering）、發票（Invoicing）、稅務（Taxation）、SVL（Stored Value Facility License）、Money Transmission License 等，全部都不同。
+
+很多 Payment PM 不只是寫 Payment System 或設計付款流程，而是在不同監管框架之間，找到一個所有市場都能運作的共同架構，讓資金安全、高效、合規地流經整個生態系統。
+
+## 結語
+
+當交易量只有每天一百筆時，很多問題都可以靠人手解決。但當平台每天要處理數百萬筆交易，Payment 就不再只是 Checkout。
+
+它開始變成一門關於流動性（Liquidity）、成本（Cost）、速度（Speed）、風險（Risk）與監管（Compliance）之間的系統設計。
+
+### The Constraint Triangle
+
+                Cost
+                 ▲
+                / \\
+               /   \\
+              /     \\
+             /       \\
+        TRUST ------- Speed
+
+這三個角互相牽制：想要極致的速度與體驗，可能就要付出更高的墊資成本或牌照代價；想要極低的成本，可能就得犧牲即時到帳的時效。在限制中找到最優解，就是產品團隊每天的任務。
+
+這個系列接下來會逐個模組拆下去：入金的成本結構、出金與 Wallet 的帳本設計、現金訂單如何令資金流方向倒轉。如果你也對「錢在平台裡怎樣流動」感興趣，歡迎追蹤。
+
+## References
+
+1. [Stripe — Payfacs guide](https://stripe.com/guides/payfacs)
+2. [PYMNTS — Pix Turns 5](https://www.pymnts.com/real-time-payments/2025/pix-turns-5-brazil-real-time-payments-shift-accelerates/)
+3. [EBANX — Pix 8B monthly transactions](https://business.ebanx.com/en/press-room/press-releases/pix-to-approach-8-billion-monthly-transactions-as-it-marks-five-year-milestone-ebanx-study-finds)
+4. [Fintech Singapore — SEA Payment Methods 2026](https://fintechnews.sg/128337/e-commerce/southeast-asia-payment-methods-2026-global-payments-report/)
+5. [Totally Rewards — Payout Speed](https://www.totallyrewards.com/blog/payout-speed-the-competitive-advantage-in-the-gig-economy)
+6. [USIO — Access to Pay](https://usio.com/access-to-pay-is-access-to-work/)
+7. [a16z — 13 Metrics for Marketplace Companies](https://a16z.com/13-metrics-for-marketplace-companies/)
+8. [Spark — Marketplace Payments Platform Economics](https://www.spark.money/research/marketplace-payments-platform-economics)
+9. [Venable — Money Transmission in the PayFac Model](https://www.venable.com/insights/publications/2018/06/money-transmission-in-the-payment-facilitator-mode)
+10. [PayRam — How to Become a PayFac](https://www.payram.com/blog/how-to-become-a-payment-facilitator)`
+  },
+  {
     id: 'firelight-2026-06-13',
     status: 'published',
     title: '我們治好了黑夜，卻不小心殺死了營火：為什麼我們丟失了深夜的真心話？',
