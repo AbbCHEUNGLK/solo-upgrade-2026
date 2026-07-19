@@ -1,14 +1,13 @@
 // app.js — 導航 + 初始化
 
 const PAGE_NAMES = {
-  home:      '首頁',
-  daily:     '每日任務',
-  'wish-jar':'願望罐',
-  session:   'Storytelling Session',
-  ldr:       'Learn → Re-tell',
-  writer:    'Substack Writer',
-  thread:    'Thread',
-  certs:     '專業認證',
+  home:    '首頁',
+  daily:   '每日任務',
+  session: 'Storytelling Session',
+  ldr:     'Learn → Re-tell',
+  writer:  'Substack Writer',
+  thread:  'Thread',
+  certs:   '專業認證',
 };
 
 const NTASKS = 5;
@@ -31,14 +30,13 @@ function go(page) {
   });
   document.getElementById('bc-page').textContent = PAGE_NAMES[page];
   ({
-    home:      renderHome,
-    daily:     renderDaily,
-    'wish-jar':renderWishJar,
-    session:   renderSession,
-    ldr:       renderLDR,
-    writer:    renderWriter,
-    thread:    renderThread,
-    certs:     renderCerts,
+    home:    renderHome,
+    daily:   renderDaily,
+    session: renderSession,
+    ldr:     renderLDR,
+    writer:  renderWriter,
+    thread:  renderThread,
+    certs:   renderCerts,
   })[page]?.();
   updateTopProgress();
   return false;

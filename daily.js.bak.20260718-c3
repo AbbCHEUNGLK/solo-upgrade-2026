@@ -165,8 +165,57 @@ async function _seedMissionsIfEmpty() {
   }
 }
 
-// ─── Earn / un-earn helpers moved to rewards.js (Concern 3, 2026-07-18)
-// daily.js 依家 call rewards.js 嘅 earnMission / unearnMission 公 API
+// ─── Earn / un-earn helpers（minimal · Concern 4 will formalize strike + cap）
+function _weekStart(dateStr) {
+  // Sunday as week start (Apple Cal align)
+  const d = new Date(dateStr);
+  d.setDate(d.getDate() - d.getDay());
+  return d.toISOString().slice(0, 10);
+}
+
+async function _earnFromMission(mission) {
+  const state = Storage.getJarState() || {};
+  const today = new Date().toISOString().slice(0, 10);
+  const currentWeekStart = _weekStart(today);
+
+  // Weekly rollover: reset weeklyEarned 如果過咗一個 week
+  if (state.weekStartDate !== currentWeekStart) {
+    state.weekStartDate = currentWeekStart;
+    state.weeklyEarned = 0;
+  }
+
+  const amount = mission.reward || 0;
+  state.totalEarned = (state.totalEarned || 0) + amount;
+  state.weeklyEarned = (state.weeklyEarned || 0) + amount;
+  state.earnLog = state.earnLog || [];
+  state.earnLog.push({
+    missionId: mission.id,
+    amount,
+    timestamp: new Date().toISOString(),
+  });
+
+  await Storage.setJarState(state);
+}
+
+async function _unearnFromMission(mission) {
+  const state = Storage.getJarState() || {};
+  const amount = mission.reward || 0;
+  state.totalEarned = Math.max(0, (state.totalEarned || 0) - amount);
+  state.weeklyEarned = Math.max(0, (state.weeklyEarned || 0) - amount);
+
+  // Remove most recent earnLog entry for this mission today
+  const today = new Date().toISOString().slice(0, 10);
+  const log = state.earnLog || [];
+  for (let i = log.length - 1; i >= 0; i--) {
+    if (log[i].missionId === mission.id && log[i].timestamp.slice(0, 10) === today) {
+      log.splice(i, 1);
+      break;
+    }
+  }
+  state.earnLog = log;
+
+  await Storage.setJarState(state);
+}
 
 function _lensFor(mission) {
   return mission.lens?.[_todayKey()] || '';
@@ -271,11 +320,11 @@ async function toggleTask(id, e) {
   if (wasComplete) {
     tasksDone.splice(idx, 1);
     await Storage.setTasksDone(tasksDone);
-    await unearnMission(id);
+    await _unearnFromMission(mission);
   } else {
     tasksDone.push(id);
     await Storage.setTasksDone(tasksDone);
-    await earnMission(id);
+    await _earnFromMission(mission);
   }
 
   document.getElementById('ti-' + id)?.classList.toggle('done', !wasComplete);

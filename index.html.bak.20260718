@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>獨自升級 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@600;700&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Lora:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,9 +25,6 @@
       <a class="nav-item" onclick="go('daily')" href="#">
         <span class="nav-icon">✅</span> 每日任務
         <span class="nav-count" id="nc-daily">0/5</span>
-      </a>
-      <a class="nav-item" onclick="go('wish-jar')" href="#">
-        <span class="nav-icon">☾</span> 願望罐
       </a>
       <a class="nav-item" onclick="go('session')" href="#">
         <span class="nav-icon">🎙</span> Storytelling Session
@@ -79,7 +76,7 @@
   <div class="mobile-nav">
     <div class="mn-item active" onclick="go('home')"><span class="mn-icon">🏠</span><span class="mn-label">首頁</span></div>
     <div class="mn-item" onclick="go('daily')"><span class="mn-icon">✅</span><span class="mn-label">任務</span></div>
-    <div class="mn-item" onclick="go('wish-jar')"><span class="mn-icon">☾</span><span class="mn-label">願望</span></div>
+    <div class="mn-item" onclick="go('ldr')"><span class="mn-icon">📖</span><span class="mn-label">Re-tell</span></div>
     <div class="mn-item" onclick="go('writer')"><span class="mn-icon">✍️</span><span class="mn-label">Writer</span></div>
     <div class="mn-item" onclick="go('certs')"><span class="mn-icon">🏆</span><span class="mn-label">認證</span></div>
   </div>
@@ -88,11 +85,9 @@
 
 <script src="posts/manifest.js"></script>
 <script src="storage.js"></script>
-<script src="rewards.js"></script>
 <script src="api.js"></script>
 <script src="home.js"></script>
 <script src="daily.js"></script>
-<script src="wish-jar.js"></script>
 <script src="session.js"></script>
 <script src="ldr.js"></script>
 <script src="writer.js"></script>
